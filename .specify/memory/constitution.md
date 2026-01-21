@@ -1,50 +1,79 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+# EV Car Rental Website Constitution
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### I. Simplicity First
+This is a Proof of Concept (PoC) project. All implementations must prioritize simplicity over complexity. No external dependencies, frameworks, or plugins unless absolutely necessary for core functionality.
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+### II. Pure HTML/CSS/JS Stack
+- **HTML5**: Semantic markup for structure
+- **CSS3**: Custom styles without frameworks (no Bootstrap, Tailwind, etc.)
+- **Vanilla JavaScript**: No jQuery, React, Vue, or other libraries
+- **JSON**: Static data storage for car inventory
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+### III. Mobile-First Design
+All pages must be responsive, starting with mobile design and scaling up to desktop. Use CSS Grid and Flexbox for layouts. Target breakpoints: 375px (mobile), 768px (tablet), 1024px+ (desktop).
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+### IV. No Backend Required
+This PoC operates entirely client-side:
+- Car data stored in static JSON file
+- Form submissions show success messages (no actual data transmission)
+- No database, API, or server-side processing
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+### V. Accessibility Standards
+- Semantic HTML elements (header, nav, main, footer, article, section)
+- Alt text for images
+- Keyboard navigable
+- Sufficient color contrast (WCAG 2.1 AA minimum)
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+## Technology Constraints
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
+### Allowed
+- HTML5
+- CSS3 (including CSS Variables, Grid, Flexbox)
+- Vanilla JavaScript (ES6+)
+- JSON for static data
+- SVG/Emoji for icons
 
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
+### Prohibited (for this PoC)
+- CSS frameworks (Bootstrap, Tailwind, Bulma)
+- JavaScript frameworks/libraries (React, Vue, Angular, jQuery)
+- Build tools (Webpack, Vite, Parcel)
+- Package managers for frontend (npm dependencies)
+- Backend technologies
+- External CDN resources
+- Third-party APIs
 
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+## Project Structure
+
+```
+evcarrental/
+├── index.html          # Home page
+├── cars.html           # Vehicle listings
+├── car-details.html    # Single vehicle view
+├── booking.html        # Booking inquiry form
+├── about.html          # Company information
+├── contact.html        # Contact form & info
+├── css/
+│   └── styles.css      # All styles
+├── js/
+│   └── main.js         # All JavaScript
+├── data/
+│   └── cars.json       # Vehicle inventory
+├── images/             # Static images
+└── docs/
+    └── PRD.md          # Requirements document
+```
+
+## Development Workflow
+
+1. **Feature Development**: Implement features incrementally
+2. **Browser Testing**: Test in Chrome, Firefox, Safari, Edge
+3. **Mobile Testing**: Verify responsive design
+4. **Code Review**: Ensure compliance with constitution
 
 ## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+This constitution defines the boundaries for the PoC phase. Any deviation requires explicit justification and documentation. Future phases may relax these constraints as the project evolves.
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+**Version**: 1.0 | **Ratified**: 2026-01-21 | **Last Amended**: 2026-01-21

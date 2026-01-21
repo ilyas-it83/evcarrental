@@ -1,104 +1,62 @@
 # Implementation Plan: [FEATURE]
 
 **Branch**: `[###-feature-name]` | **Date**: [DATE] | **Spec**: [link]
-**Input**: Feature specification from `/specs/[###-feature-name]/spec.md`
-
-**Note**: This template is filled in by the `/speckit.plan` command. See `.specify/templates/commands/plan.md` for the execution workflow.
 
 ## Summary
 
-[Extract from feature spec: primary requirement + technical approach from research]
+[Brief description of what this feature adds to the car rental website]
 
 ## Technical Context
 
-<!--
-  ACTION REQUIRED: Replace the content in this section with the technical details
-  for the project. The structure here is presented in advisory capacity to guide
-  the iteration process.
--->
-
-**Language/Version**: [e.g., Python 3.11, Swift 5.9, Rust 1.75 or NEEDS CLARIFICATION]  
-**Primary Dependencies**: [e.g., FastAPI, UIKit, LLVM or NEEDS CLARIFICATION]  
-**Storage**: [if applicable, e.g., PostgreSQL, CoreData, files or N/A]  
-**Testing**: [e.g., pytest, XCTest, cargo test or NEEDS CLARIFICATION]  
-**Target Platform**: [e.g., Linux server, iOS 15+, WASM or NEEDS CLARIFICATION]
-**Project Type**: [single/web/mobile - determines source structure]  
-**Performance Goals**: [domain-specific, e.g., 1000 req/s, 10k lines/sec, 60 fps or NEEDS CLARIFICATION]  
-**Constraints**: [domain-specific, e.g., <200ms p95, <100MB memory, offline-capable or NEEDS CLARIFICATION]  
-**Scale/Scope**: [domain-specific, e.g., 10k users, 1M LOC, 50 screens or NEEDS CLARIFICATION]
+**Technology Stack**: HTML5, CSS3, Vanilla JavaScript  
+**Data Source**: Local JSON file (data/cars.json)  
+**Target Browsers**: Chrome, Firefox, Safari, Edge (latest versions)  
+**Responsiveness**: Mobile-first (375px → 768px → 1024px+)  
+**Dependencies**: None (pure HTML/CSS/JS)
 
 ## Constitution Check
 
-*GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
+- [ ] No external frameworks or libraries
+- [ ] Pure HTML5 semantic markup
+- [ ] CSS3 with variables and Grid/Flexbox
+- [ ] Vanilla JavaScript (ES6+)
+- [ ] Mobile-first responsive design
+- [ ] Accessible (keyboard nav, semantic elements)
 
-[Gates determined based on constitution file]
+## Files to Create/Modify
 
-## Project Structure
-
-### Documentation (this feature)
-
+### New Files
 ```text
-specs/[###-feature]/
-├── plan.md              # This file (/speckit.plan command output)
-├── research.md          # Phase 0 output (/speckit.plan command)
-├── data-model.md        # Phase 1 output (/speckit.plan command)
-├── quickstart.md        # Phase 1 output (/speckit.plan command)
-├── contracts/           # Phase 1 output (/speckit.plan command)
-└── tasks.md             # Phase 2 output (/speckit.tasks command - NOT created by /speckit.plan)
+[List any new files needed]
 ```
 
-### Source Code (repository root)
-<!--
-  ACTION REQUIRED: Replace the placeholder tree below with the concrete layout
-  for this feature. Delete unused options and expand the chosen structure with
-  real paths (e.g., apps/admin, packages/something). The delivered plan must
-  not include Option labels.
--->
-
+### Modified Files
 ```text
-# [REMOVE IF UNUSED] Option 1: Single project (DEFAULT)
-src/
-├── models/
-├── services/
-├── cli/
-└── lib/
-
-tests/
-├── contract/
-├── integration/
-└── unit/
-
-# [REMOVE IF UNUSED] Option 2: Web application (when "frontend" + "backend" detected)
-backend/
-├── src/
-│   ├── models/
-│   ├── services/
-│   └── api/
-└── tests/
-
-frontend/
-├── src/
-│   ├── components/
-│   ├── pages/
-│   └── services/
-└── tests/
-
-# [REMOVE IF UNUSED] Option 3: Mobile + API (when "iOS/Android" detected)
-api/
-└── [same as backend above]
-
-ios/ or android/
-└── [platform-specific structure: feature modules, UI flows, platform tests]
+[List existing files that need changes]
+- index.html (if applicable)
+- css/styles.css (new styles)
+- js/main.js (new functionality)
+- data/cars.json (new data)
 ```
 
-**Structure Decision**: [Document the selected structure and reference the real
-directories captured above]
+## Implementation Approach
 
-## Complexity Tracking
+### HTML Structure
+[Describe the HTML elements and structure needed]
 
-> **Fill ONLY if Constitution Check has violations that must be justified**
+### CSS Styling
+[Describe the CSS classes and responsive behavior]
 
-| Violation | Why Needed | Simpler Alternative Rejected Because |
-|-----------|------------|-------------------------------------|
-| [e.g., 4th project] | [current need] | [why 3 projects insufficient] |
-| [e.g., Repository pattern] | [specific problem] | [why direct DB access insufficient] |
+### JavaScript Functionality
+[Describe the JS functions and event handlers needed]
+
+## Testing Checklist
+
+- [ ] Page loads without errors
+- [ ] Displays correctly on mobile (375px)
+- [ ] Displays correctly on tablet (768px)
+- [ ] Displays correctly on desktop (1024px+)
+- [ ] All interactive elements work
+- [ ] Form validation works (if applicable)
+- [ ] Links navigate correctly
+- [ ] No console errors

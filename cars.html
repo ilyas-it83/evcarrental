@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Browse our selection of rental cars - sedans, SUVs, electric vehicles, and luxury cars at competitive prices.">
+  <title>Our Cars - EV Car Rental</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="container">
+      <a href="index.html" class="logo">
+        <span class="logo-icon">🚗</span>
+        EV Car Rental
+      </a>
+      
+      <nav class="nav-desktop">
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="cars.html" class="active">Our Cars</a></li>
+          <li><a href="booking.html">Book Now</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+      
+      <button class="menu-toggle" aria-label="Toggle menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      
+      <nav class="nav-mobile">
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="cars.html" class="active">Our Cars</a></li>
+          <li><a href="booking.html">Book Now</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Page Header -->
+  <section class="page-header">
+    <div class="container">
+      <h1>Our Vehicle Fleet</h1>
+      <p>Find the perfect car for your journey from our diverse selection</p>
+    </div>
+  </section>
+
+  <!-- Breadcrumb -->
+  <nav class="breadcrumb">
+    <div class="container">
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li>Our Cars</li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <section class="section">
+    <div class="container">
+      <div class="page-with-sidebar">
+        <!-- Filters Sidebar -->
+        <aside class="filters-sidebar" id="filters-container">
+          <h2>Filter Vehicles</h2>
+          
+          <div class="filter-group">
+            <h3>Vehicle Type</h3>
+            <div id="type-filters">
+              <!-- Filters will be loaded dynamically -->
+            </div>
+          </div>
+          
+          <div class="filter-group">
+            <h3>Transmission</h3>
+            <div id="transmission-filters">
+              <!-- Filters will be loaded dynamically -->
+            </div>
+          </div>
+          
+          <div class="filter-group">
+            <h3>Fuel Type</h3>
+            <div id="fuel-filters">
+              <!-- Filters will be loaded dynamically -->
+            </div>
+          </div>
+          
+          <button id="clear-filters" class="btn btn-outline" style="width: 100%;">
+            Clear All Filters
+          </button>
+        </aside>
+
+        <!-- Cars Grid -->
+        <div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-4);">
+            <p id="results-count" class="text-gray">Loading vehicles...</p>
+          </div>
+          
+          <div class="cars-grid" id="cars-grid">
+            <!-- Cars will be loaded dynamically via JavaScript -->
+            <div class="car-card">
+              <div class="car-image"><span>🚗</span></div>
+              <div class="car-content">
+                <span class="car-type">Loading...</span>
+                <h3>Loading cars...</h3>
+                <div class="car-specs">
+                  <span>Please wait while we load our vehicle fleet...</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-section">
+          <h3>EV Car Rental</h3>
+          <p>Your trusted partner for quality car rentals since 2020. We're committed to providing reliable vehicles and exceptional customer service.</p>
+        </div>
+        
+        <div class="footer-section">
+          <h3>Quick Links</h3>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="cars.html">Our Cars</a></li>
+            <li><a href="booking.html">Book Now</a></li>
+            <li><a href="about.html">About Us</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-section">
+          <h3>Vehicle Types</h3>
+          <ul>
+            <li><a href="cars.html">Sedans</a></li>
+            <li><a href="cars.html">SUVs</a></li>
+            <li><a href="cars.html">Electric Cars</a></li>
+            <li><a href="cars.html">Luxury Cars</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-section">
+          <h3>Contact Us</h3>
+          <ul>
+            <li>📍 123 Rental Street, City</li>
+            <li>📞 +1 (555) 123-4567</li>
+            <li>✉️ info@evcarrental.com</li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="footer-bottom">
+        <p>&copy; 2026 EV Car Rental. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
