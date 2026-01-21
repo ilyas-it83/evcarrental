@@ -617,11 +617,13 @@ function renderReviewsList(reviews) {
     return '<p class="no-reviews">No reviews match your filter.</p>';
   }
   
-  return reviews.map(review => `
+  return reviews.map(review => {
+    const authorInitial = review.author && review.author.length > 0 ? review.author.charAt(0) : 'U';
+    return `
     <article class="review-card">
       <div class="review-header">
         <div class="review-author">
-          <div class="author-avatar">${review.author.charAt(0)}</div>
+          <div class="author-avatar">${authorInitial}</div>
           <div>
             <div class="author-name">${review.author}</div>
             <div class="review-date">${formatReviewDate(review.date)}</div>
@@ -631,28 +633,26 @@ function renderReviewsList(reviews) {
       </div>
       <p class="review-comment">${review.comment}</p>
       <div class="review-footer">
-        <button class="helpful-btn" disabled>
+        <button class="helpful-btn" disabled aria-label="Mark review as helpful">
           👍 Helpful (${review.helpful_count})
         </button>
       </div>
     </article>
-  `).join('');
+  `;
+  }).join('');
 }
 
 // Initialize review filters
-let allReviews = [];
-
 function initReviewFilters(reviews) {
-  allReviews = reviews;
   const filterSelect = document.getElementById('review-filter');
   
   if (filterSelect) {
     filterSelect.addEventListener('change', function() {
       const rating = this.value;
-      let filteredReviews = allReviews;
+      let filteredReviews = reviews;
       
       if (rating !== 'all') {
-        filteredReviews = allReviews.filter(r => r.rating === parseInt(rating));
+        filteredReviews = reviews.filter(r => r.rating === parseInt(rating));
       }
       
       const reviewsList = document.getElementById('reviews-list');
