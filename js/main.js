@@ -8,6 +8,7 @@
 // ============================================
 let carsData = [];
 let filteredCars = [];
+let comparisonList = [];
 
 // ============================================
 // DOM Ready
@@ -15,6 +16,7 @@ let filteredCars = [];
 document.addEventListener('DOMContentLoaded', function() {
   initMobileMenu();
   initForms();
+  initComparison();
   
   // Load cars data for pages that need it
   const carsGrid = document.getElementById('cars-grid');
@@ -78,6 +80,7 @@ async function loadCarsData() {
     populateCarSelect();
     renderCarDetails();
     initFilters(data);
+    renderComparison();
   } catch (error) {
     console.error('Error loading cars data:', error);
   }
@@ -144,7 +147,16 @@ function createCarCard(car) {
           <div class="car-price">
             $${car.pricePerDay}<span>/day</span>
           </div>
-          <a href="car-details.html?id=${car.id}" class="btn btn-primary">View Details</a>
+          <div class="car-actions">
+            <button 
+              class="btn-compare ${isInComparison ? 'active' : ''}" 
+              onclick="toggleComparison('${car.id}')"
+              title="${isInComparison ? 'Remove from comparison' : 'Add to comparison'}"
+            >
+              ${isInComparison ? '✓' : '⚖️'}
+            </button>
+            <a href="car-details.html?id=${car.id}" class="btn btn-primary">View Details</a>
+          </div>
         </div>
       </div>
     </article>
@@ -507,6 +519,176 @@ function isValidEmail(email) {
 function isValidPhone(phone) {
   const re = /^[\d\s\-\+\(\)]{10,}$/;
   return re.test(phone);
+}
+
+// ============================================
+// Vehicle Comparison Functions
+// ============================================
+
+// Initialize comparison from localStorage
+function initComparison() {
+  const saved = localStorage.getItem('carComparison');
+  if (saved) {
+    try {
+      comparisonList = JSON.parse(saved);
+    } catch (e) {
+      comparisonList = [];
+    }
+  }
+  updateComparisonBadge();
+}
+
+// Save comparison to localStorage
+function saveComparison() {
+  localStorage.setItem('carComparison', JSON.stringify(comparisonList));
+}
+
+// Toggle car in comparison
+function toggleComparison(carId) {
+  const index = comparisonList.indexOf(carId);
+  
+  if (index > -1) {
+    // Remove from comparison
+    comparisonList.splice(index, 1);
+  } else {
+    // Add to comparison (max 3)
+    if (comparisonList.length >= 3) {
+      alert('You can compare up to 3 vehicles at a time. Please remove one to add another.');
+      return;
+    }
+    comparisonList.push(carId);
+  }
+  
+  saveComparison();
+  updateComparisonBadge();
+  
+  // Re-render grids if they exist
+  renderFeaturedCars();
+  renderCarsGrid();
+  renderComparison();
+}
+
+// Update comparison badge in header
+function updateComparisonBadge() {
+  let badge = document.getElementById('comparison-badge');
+  
+  if (!badge) {
+    // Create badge element if it doesn't exist
+    const header = document.querySelector('.header .container');
+    if (header) {
+      badge = document.createElement('a');
+      badge.id = 'comparison-badge';
+      badge.href = 'comparison.html';
+      badge.className = 'comparison-badge';
+      badge.style.display = 'none';
+      header.appendChild(badge);
+    }
+  }
+  
+  if (badge) {
+    if (comparisonList.length > 0) {
+      badge.style.display = 'flex';
+      badge.innerHTML = `⚖️ Compare (${comparisonList.length})`;
+    } else {
+      badge.style.display = 'none';
+    }
+  }
+}
+
+// Render comparison page
+function renderComparison() {
+  const container = document.getElementById('comparison-container');
+  if (!container) return;
+  
+  if (comparisonList.length === 0) {
+    container.innerHTML = `
+      <div class="comparison-empty">
+        <h2>No Vehicles Selected</h2>
+        <p>You haven't added any vehicles to compare yet.</p>
+        <a href="cars.html" class="btn btn-primary">Browse Our Cars</a>
+      </div>
+    `;
+    return;
+  }
+  
+  const cars = comparisonList.map(id => carsData.find(car => car.id === id)).filter(Boolean);
+  
+  if (cars.length === 0) {
+    container.innerHTML = `
+      <div class="comparison-empty">
+        <h2>Vehicles Not Found</h2>
+        <p>The selected vehicles could not be loaded.</p>
+        <a href="cars.html" class="btn btn-primary">Browse Our Cars</a>
+      </div>
+    `;
+    return;
+  }
+  
+  container.innerHTML = `
+    <div class="comparison-header">
+      <h1>Compare Vehicles</h1>
+      <div class="comparison-actions">
+        <button onclick="clearComparison()" class="btn btn-outline">Clear All</button>
+      </div>
+    </div>
+    
+    <div class="comparison-table">
+      ${renderComparisonRow('Vehicle', cars.map(car => `
+        <div class="comparison-car-header">
+          <div class="car-image-small">🚗</div>
+          <h3>${car.name}</h3>
+          <span class="car-type">${car.type}</span>
+          <button onclick="toggleComparison('${car.id}')" class="btn-remove" title="Remove from comparison">✕</button>
+        </div>
+      `))}
+      
+      ${renderComparisonRow('Year', cars.map(car => car.year))}
+      ${renderComparisonRow('Seats', cars.map(car => `${car.seats} passengers`), true)}
+      ${renderComparisonRow('Transmission', cars.map(car => car.transmission), true)}
+      ${renderComparisonRow('Fuel Type', cars.map(car => car.fuelType), true)}
+      
+      ${renderComparisonRow('Daily Rate', cars.map(car => `$${car.pricePerDay}`), true)}
+      ${renderComparisonRow('Weekly Rate', cars.map(car => `$${car.pricePerWeek}`), true)}
+      ${renderComparisonRow('Deposit', cars.map(car => `$${car.deposit}`), true)}
+      
+      ${renderComparisonRow('Features', cars.map(car => `
+        <ul class="features-list-small">
+          ${car.features.map(f => `<li>${f}</li>`).join('')}
+        </ul>
+      `))}
+      
+      ${renderComparisonRow('Actions', cars.map(car => `
+        <div class="comparison-actions-cell">
+          <a href="car-details.html?id=${car.id}" class="btn btn-outline btn-sm">View Details</a>
+          <a href="booking.html?car=${car.id}" class="btn btn-primary btn-sm">Book Now</a>
+        </div>
+      `))}
+    </div>
+  `;
+}
+
+// Helper function to render comparison table row
+function renderComparisonRow(label, values, highlight = false) {
+  const shouldHighlight = highlight && values.length > 1 && !values.every((val, i, arr) => val === arr[0]);
+  
+  return `
+    <div class="comparison-row ${shouldHighlight ? 'highlight-differences' : ''}">
+      <div class="comparison-label">${label}</div>
+      ${values.map(value => `<div class="comparison-value">${value}</div>`).join('')}
+    </div>
+  `;
+}
+
+// Clear all comparison
+function clearComparison() {
+  if (confirm('Are you sure you want to clear all vehicles from comparison?')) {
+    comparisonList = [];
+    saveComparison();
+    updateComparisonBadge();
+    renderComparison();
+    renderFeaturedCars();
+    renderCarsGrid();
+  }
 }
 
 // ============================================
