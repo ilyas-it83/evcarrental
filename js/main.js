@@ -29,6 +29,12 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // Initialize Range Calculator
   initRangeCalculator();
+  
+  // Initialize charging calculator
+  const calculatorForm = document.getElementById('charging-calculator-form');
+  if (calculatorForm) {
+    initChargingCalculator();
+  }
 });
 
 // ============================================
@@ -677,13 +683,55 @@ function initRangeCalculator() {
   if (!vehicleSelect || !calculateBtn) return;
   
   // Populate vehicle select with EVs only
-  populateVehicleSelect();
+  populateRangeVehicleSelect();
   
   // Calculate button click handler
   calculateBtn.addEventListener('click', calculateRange);
 }
 
-function populateVehicleSelect() {
+// ============================================
+// Charging Cost Calculator
+// ============================================
+
+// Charging rates ($/kWh)
+const CHARGING_RATES = {
+  home: 0.12,
+  public: 0.30,
+  dcfast: 0.45
+};
+
+// Fuel costs ($/liter)
+const FUEL_COSTS = {
+  petrol: 1.50,
+  diesel: 1.60
+};
+
+// Traditional vehicle efficiency (liters/100km)
+const TRADITIONAL_EFFICIENCY = {
+  petrol: 8,
+  diesel: 6
+};
+
+// Charging efficiency (account for charging losses)
+const CHARGING_EFFICIENCY = 0.90;
+
+function initChargingCalculator() {
+  const form = document.getElementById('charging-calculator-form');
+  const vehicleSelect = document.getElementById('charging-vehicle-select');
+  
+  if (!form || !vehicleSelect) return;
+  
+  // Populate vehicle select with electric and hybrid vehicles
+  populateChargingVehicleSelect();
+  
+  // Handle form submission
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    calculateChargingCosts();
+  });
+}
+
+function populateRangeVehicleSelect() {
   const select = document.getElementById('vehicle-select');
   if (!select) return;
   
@@ -694,6 +742,25 @@ function populateVehicleSelect() {
     const option = document.createElement('option');
     option.value = car.id;
     option.textContent = `${car.name} (${car.range} km range)`;
+    select.appendChild(option);
+  });
+}
+
+function populateChargingVehicleSelect() {
+  const select = document.getElementById('charging-vehicle-select');
+  if (!select) return;
+  
+  // Filter for electric and hybrid vehicles with efficiency data
+  const evAndHybridCars = carsData.filter(car => 
+    (car.fuelType === 'Electric' || car.fuelType === 'Hybrid') && 
+    car.efficiency && 
+    car.batteryCapacity
+  );
+  
+  evAndHybridCars.forEach(car => {
+    const option = document.createElement('option');
+    option.value = car.id;
+    option.textContent = `${car.name} (${car.fuelType}) - ${car.efficiency} kWh/100km`;
     select.appendChild(option);
   });
 }
@@ -757,10 +824,10 @@ function calculateRange() {
   }
   
   // Display results
-  displayResults(vehicle, estimatedRange, tripDistance, rangePercentage, tripStatus, statusClass, recommendation);
+  displayRangeResults(vehicle, estimatedRange, tripDistance, rangePercentage, tripStatus, statusClass, recommendation);
 }
 
-function displayResults(vehicle, estimatedRange, tripDistance, rangePercentage, tripStatus, statusClass, recommendation) {
+function displayRangeResults(vehicle, estimatedRange, tripDistance, rangePercentage, tripStatus, statusClass, recommendation) {
   const resultsPanel = document.getElementById('results-panel');
   
   if (!resultsPanel) return;
@@ -805,4 +872,121 @@ function displayResults(vehicle, estimatedRange, tripDistance, rangePercentage, 
       </div>
     </div>
   `;
+}
+
+function calculateChargingCosts() {
+  const vehicleId = document.getElementById('charging-vehicle-select').value;
+  const distance = parseFloat(document.getElementById('charging-trip-distance').value);
+  const chargingType = document.getElementById('charging-type').value;
+  const customRate = document.getElementById('custom-rate').value;
+  
+  if (!vehicleId || !distance) {
+    alert('Please select a vehicle and enter trip distance');
+    return;
+  }
+  
+  const vehicle = carsData.find(car => car.id === vehicleId);
+  if (!vehicle) return;
+  
+  // Get electricity rate
+  const electricityRate = customRate ? parseFloat(customRate) : CHARGING_RATES[chargingType];
+  
+  // Calculate EV costs
+  // Energy needed = (distance / 100) * efficiency / charging_efficiency
+  const energyNeeded = (distance / 100) * vehicle.efficiency / CHARGING_EFFICIENCY;
+  const evCost = energyNeeded * electricityRate;
+  const evCostPerKm = evCost / distance;
+  
+  // Calculate traditional fuel costs (use petrol as baseline)
+  const fuelNeeded = (distance / 100) * TRADITIONAL_EFFICIENCY.petrol;
+  const fuelCost = fuelNeeded * FUEL_COSTS.petrol;
+  const fuelCostPerKm = fuelCost / distance;
+  
+  // Calculate savings
+  const savings = fuelCost - evCost;
+  const percentageSaved = (savings / fuelCost) * 100;
+  
+  // Display results
+  displayChargingResults({
+    vehicle,
+    distance,
+    energyNeeded,
+    evCost,
+    evCostPerKm,
+    fuelNeeded,
+    fuelCost,
+    fuelCostPerKm,
+    savings,
+    percentageSaved,
+    electricityRate,
+    chargingType
+  });
+  
+  // Show results section
+  const resultsSection = document.getElementById('calculator-results');
+  if (resultsSection) {
+    resultsSection.style.display = 'block';
+    resultsSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+}
+
+function displayChargingResults(data) {
+  // EV costs
+  document.getElementById('ev-energy').textContent = `${data.energyNeeded.toFixed(2)} kWh`;
+  document.getElementById('ev-cost').textContent = formatCurrency(data.evCost);
+  document.getElementById('ev-per-km').textContent = formatCurrency(data.evCostPerKm);
+  
+  // Fuel costs
+  document.getElementById('fuel-volume').textContent = `${data.fuelNeeded.toFixed(2)} liters`;
+  document.getElementById('fuel-cost').textContent = formatCurrency(data.fuelCost);
+  document.getElementById('fuel-per-km').textContent = formatCurrency(data.fuelCostPerKm);
+  
+  // Savings
+  const savingsEl = document.getElementById('total-savings');
+  const percentageEl = document.getElementById('percentage-saved');
+  const messageEl = document.getElementById('savings-message');
+  
+  if (data.savings > 0) {
+    savingsEl.textContent = formatCurrency(data.savings);
+    savingsEl.style.color = 'var(--color-success)';
+    percentageEl.textContent = `${data.percentageSaved.toFixed(1)}%`;
+    percentageEl.style.color = 'var(--color-success)';
+    messageEl.textContent = `🎉 You'll save ${formatCurrency(data.savings)} on this ${data.distance}km trip by choosing electric!`;
+    messageEl.style.color = 'var(--color-success)';
+  } else {
+    savingsEl.textContent = formatCurrency(Math.abs(data.savings));
+    savingsEl.style.color = 'var(--color-error)';
+    percentageEl.textContent = `${Math.abs(data.percentageSaved).toFixed(1)}% more`;
+    percentageEl.style.color = 'var(--color-error)';
+    messageEl.textContent = `Electric charging costs slightly more in this scenario, but you're still helping the environment!`;
+    messageEl.style.color = 'var(--color-gray)';
+  }
+  
+  // Charging options comparison
+  displayChargingOptions(data);
+}
+
+function displayChargingOptions(data) {
+  const tbody = document.getElementById('charging-options-body');
+  if (!tbody) return;
+  
+  const chargingTypes = [
+    { type: 'Home', rate: CHARGING_RATES.home, key: 'home' },
+    { type: 'Public', rate: CHARGING_RATES.public, key: 'public' },
+    { type: 'DC Fast', rate: CHARGING_RATES.dcfast, key: 'dcfast' }
+  ];
+  
+  tbody.innerHTML = chargingTypes.map(charging => {
+    const cost = data.energyNeeded * charging.rate;
+    const isSelected = data.chargingType === charging.key;
+    const rowClass = isSelected ? 'class="selected-row"' : '';
+    
+    return `
+      <tr ${rowClass}>
+        <td>${charging.type}${isSelected ? ' ⭐' : ''}</td>
+        <td>$${charging.rate.toFixed(2)}/kWh</td>
+        <td><strong>${formatCurrency(cost)}</strong></td>
+      </tr>
+    `;
+  }).join('');
 }
