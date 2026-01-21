@@ -660,11 +660,17 @@ function displayCarbonFootprint(carbonData) {
       </div>
     </div>
     <div class="carbon-share">
-      <button class="btn-share" onclick="shareCarbonFootprint(${JSON.stringify(carbonData).replace(/"/g, '&quot;')})">
+      <button class="btn-share" id="share-carbon-btn">
         Share My Green Badge
       </button>
     </div>
   `;
+  
+  // Add event listener for share button
+  const shareBtn = carbonDisplay.querySelector('#share-carbon-btn');
+  if (shareBtn) {
+    shareBtn.addEventListener('click', () => shareCarbonFootprint(carbonData));
+  }
 }
 
 /**
@@ -695,7 +701,9 @@ function shareCarbonFootprint(carbonData) {
 function copyToClipboard(text) {
   if (navigator.clipboard) {
     navigator.clipboard.writeText(text).then(() => {
-      alert('Green badge message copied to clipboard! Paste it to share on social media.');
+      showCopyNotification('Green badge message copied! Paste it to share on social media.');
+    }).catch(() => {
+      showCopyNotification('Unable to copy automatically. Please copy manually.', 'error');
     });
   } else {
     // Fallback for older browsers
@@ -707,12 +715,42 @@ function copyToClipboard(text) {
     textarea.select();
     try {
       document.execCommand('copy');
-      alert('Green badge message copied to clipboard! Paste it to share on social media.');
+      showCopyNotification('Green badge message copied! Paste it to share on social media.');
     } catch (err) {
-      alert('Unable to copy. Please share manually: ' + text);
+      showCopyNotification('Unable to copy. Please share manually: ' + text, 'error');
     }
     document.body.removeChild(textarea);
   }
+}
+
+/**
+ * Show copy notification
+ */
+function showCopyNotification(message, type = 'success') {
+  // Remove any existing notification
+  const existingNotification = document.querySelector('.copy-notification');
+  if (existingNotification) {
+    existingNotification.remove();
+  }
+  
+  // Create notification element
+  const notification = document.createElement('div');
+  notification.className = `copy-notification copy-notification-${type}`;
+  notification.textContent = message;
+  document.body.appendChild(notification);
+  
+  // Show notification with animation
+  setTimeout(() => {
+    notification.classList.add('show');
+  }, 10);
+  
+  // Hide and remove after 4 seconds
+  setTimeout(() => {
+    notification.classList.remove('show');
+    setTimeout(() => {
+      notification.remove();
+    }, 300);
+  }, 4000);
 }
 
 // ============================================

@@ -934,6 +934,42 @@ input, textarea, select {
   }
 }
 
+/* Copy Notification */
+.copy-notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: var(--space-4) var(--space-6);
+  background-color: var(--color-success);
+  color: var(--color-white);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  z-index: 10000;
+  opacity: 0;
+  transform: translateX(400px);
+  transition: all var(--transition-base);
+  max-width: 400px;
+  font-size: var(--font-size-sm);
+  line-height: 1.4;
+}
+
+.copy-notification.show {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.copy-notification-error {
+  background-color: var(--color-error);
+}
+
+@media (max-width: 768px) {
+  .copy-notification {
+    left: 20px;
+    right: 20px;
+    max-width: none;
+  }
+}
+
 /* ============================================
    Filters Sidebar
    ============================================ */
