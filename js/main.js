@@ -108,6 +108,9 @@ function renderCarsGrid() {
 // Create Car Card HTML
 // ============================================
 function createCarCard(car) {
+  const avgRating = calculateAverageRating(car.reviews || []);
+  const reviewCount = car.reviews ? car.reviews.length : 0;
+  
   return `
     <article class="car-card">
       <div class="car-image">
@@ -116,6 +119,12 @@ function createCarCard(car) {
       <div class="car-content">
         <span class="car-type">${car.type}</span>
         <h3>${car.name}</h3>
+        ${avgRating > 0 ? `
+          <div class="rating-summary">
+            ${renderStars(avgRating)}
+            <span class="rating-text">${avgRating.toFixed(1)} (${reviewCount} ${reviewCount === 1 ? 'review' : 'reviews'})</span>
+          </div>
+        ` : ''}
         <div class="car-specs">
           <span>👤 ${car.seats} seats</span>
           <span>⚙️ ${car.transmission}</span>
@@ -164,6 +173,9 @@ function renderCarDetails() {
     breadcrumbName.textContent = car.name;
   }
   
+  const avgRating = calculateAverageRating(car.reviews || []);
+  const reviewCount = car.reviews ? car.reviews.length : 0;
+  
   container.innerHTML = `
     <div class="car-details-grid">
       <div class="car-gallery">
@@ -172,6 +184,12 @@ function renderCarDetails() {
       <div class="car-info">
         <span class="car-type">${car.type}</span>
         <h1>${car.name}</h1>
+        ${avgRating > 0 ? `
+          <div class="rating-summary-large">
+            ${renderStars(avgRating)}
+            <span class="rating-text">${avgRating.toFixed(1)} out of 5 (${reviewCount} ${reviewCount === 1 ? 'review' : 'reviews'})</span>
+          </div>
+        ` : ''}
         <p class="description">${car.description}</p>
         
         <div class="specs-grid">
@@ -221,7 +239,14 @@ function renderCarDetails() {
         </a>
       </div>
     </div>
+    
+    ${car.reviews && car.reviews.length > 0 ? renderReviewsSection(car.reviews) : ''}
   `;
+  
+  // Initialize review filters if reviews exist
+  if (car.reviews && car.reviews.length > 0) {
+    initReviewFilters(car.reviews);
+  }
 }
 
 // ============================================
@@ -482,4 +507,158 @@ function formatCurrency(amount) {
     style: 'currency',
     currency: 'USD'
   }).format(amount);
+}
+
+// ============================================
+// Review & Rating Functions
+// ============================================
+
+// Calculate average rating from reviews
+function calculateAverageRating(reviews) {
+  if (!reviews || reviews.length === 0) return 0;
+  const sum = reviews.reduce((acc, review) => acc + review.rating, 0);
+  return sum / reviews.length;
+}
+
+// Render star rating display
+function renderStars(rating) {
+  const fullStars = Math.floor(rating);
+  const hasHalfStar = rating % 1 >= 0.5;
+  const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+  
+  let stars = '';
+  
+  // Full stars
+  for (let i = 0; i < fullStars; i++) {
+    stars += '<span class="star star-full">★</span>';
+  }
+  
+  // Half star
+  if (hasHalfStar) {
+    stars += '<span class="star star-half">★</span>';
+  }
+  
+  // Empty stars
+  for (let i = 0; i < emptyStars; i++) {
+    stars += '<span class="star star-empty">★</span>';
+  }
+  
+  return `<div class="stars">${stars}</div>`;
+}
+
+// Format date for display
+function formatReviewDate(dateString) {
+  const date = new Date(dateString);
+  return date.toLocaleDateString('en-US', { 
+    year: 'numeric', 
+    month: 'long', 
+    day: 'numeric' 
+  });
+}
+
+// Render reviews section
+function renderReviewsSection(reviews) {
+  const avgRating = calculateAverageRating(reviews);
+  const reviewCount = reviews.length;
+  
+  // Calculate rating distribution
+  const distribution = [5, 4, 3, 2, 1].map(rating => {
+    const count = reviews.filter(r => r.rating === rating).length;
+    const percentage = reviewCount > 0 ? (count / reviewCount) * 100 : 0;
+    return { rating, count, percentage };
+  });
+  
+  return `
+    <div class="reviews-section">
+      <div class="reviews-header">
+        <h2>Customer Reviews</h2>
+        <div class="review-summary">
+          <div class="summary-score">
+            <div class="score-number">${avgRating.toFixed(1)}</div>
+            ${renderStars(avgRating)}
+            <div class="score-text">${reviewCount} ${reviewCount === 1 ? 'review' : 'reviews'}</div>
+          </div>
+          <div class="rating-distribution">
+            ${distribution.map(d => `
+              <div class="rating-bar">
+                <span class="rating-label">${d.rating} ★</span>
+                <div class="bar-container">
+                  <div class="bar-fill" style="width: ${d.percentage}%"></div>
+                </div>
+                <span class="rating-count">${d.count}</span>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      </div>
+      
+      <div class="reviews-filters">
+        <label>Filter by rating:</label>
+        <select id="review-filter">
+          <option value="all">All reviews</option>
+          <option value="5">5 stars</option>
+          <option value="4">4 stars</option>
+          <option value="3">3 stars</option>
+          <option value="2">2 stars</option>
+          <option value="1">1 star</option>
+        </select>
+      </div>
+      
+      <div class="reviews-list" id="reviews-list">
+        ${renderReviewsList(reviews)}
+      </div>
+    </div>
+  `;
+}
+
+// Render individual reviews
+function renderReviewsList(reviews) {
+  if (!reviews || reviews.length === 0) {
+    return '<p class="no-reviews">No reviews match your filter.</p>';
+  }
+  
+  return reviews.map(review => `
+    <article class="review-card">
+      <div class="review-header">
+        <div class="review-author">
+          <div class="author-avatar">${review.author.charAt(0)}</div>
+          <div>
+            <div class="author-name">${review.author}</div>
+            <div class="review-date">${formatReviewDate(review.date)}</div>
+          </div>
+        </div>
+        ${renderStars(review.rating)}
+      </div>
+      <p class="review-comment">${review.comment}</p>
+      <div class="review-footer">
+        <button class="helpful-btn" disabled>
+          👍 Helpful (${review.helpful_count})
+        </button>
+      </div>
+    </article>
+  `).join('');
+}
+
+// Initialize review filters
+let allReviews = [];
+
+function initReviewFilters(reviews) {
+  allReviews = reviews;
+  const filterSelect = document.getElementById('review-filter');
+  
+  if (filterSelect) {
+    filterSelect.addEventListener('change', function() {
+      const rating = this.value;
+      let filteredReviews = allReviews;
+      
+      if (rating !== 'all') {
+        filteredReviews = allReviews.filter(r => r.rating === parseInt(rating));
+      }
+      
+      const reviewsList = document.getElementById('reviews-list');
+      if (reviewsList) {
+        reviewsList.innerHTML = renderReviewsList(filteredReviews);
+      }
+    });
+  }
 }
