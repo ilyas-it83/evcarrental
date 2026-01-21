@@ -23,10 +23,19 @@ document.addEventListener('DOMContentLoaded', function() {
   const featuredCars = document.getElementById('featured-cars');
   const carSelect = document.getElementById('car-select');
   const carDetailsContainer = document.getElementById('car-details-container');
-  const comparisonContainer = document.getElementById('comparison-container');
+  const vehicleSelect = document.getElementById('vehicle-select');
   
-  if (carsGrid || featuredCars || carSelect || carDetailsContainer || comparisonContainer) {
+  if (carsGrid || featuredCars || carSelect || carDetailsContainer || vehicleSelect) {
     loadCarsData();
+  }
+  
+  // Initialize Range Calculator
+  initRangeCalculator();
+  
+  // Initialize charging calculator
+  const calculatorForm = document.getElementById('charging-calculator-form');
+  if (calculatorForm) {
+    initChargingCalculator();
   }
 });
 
@@ -112,7 +121,8 @@ function renderCarsGrid() {
 // Create Car Card HTML
 // ============================================
 function createCarCard(car) {
-  const isInComparison = comparisonList.includes(car.id);
+  const avgRating = calculateAverageRating(car.reviews || []);
+  const reviewCount = car.reviews ? car.reviews.length : 0;
   
   return `
     <article class="car-card">
@@ -122,6 +132,12 @@ function createCarCard(car) {
       <div class="car-content">
         <span class="car-type">${car.type}</span>
         <h3>${car.name}</h3>
+        ${avgRating > 0 ? `
+          <div class="rating-summary">
+            ${renderStars(avgRating)}
+            <span class="rating-text">${avgRating.toFixed(1)} (${reviewCount} ${reviewCount === 1 ? 'review' : 'reviews'})</span>
+          </div>
+        ` : ''}
         <div class="car-specs">
           <span>👤 ${car.seats} seats</span>
           <span>⚙️ ${car.transmission}</span>
@@ -179,6 +195,9 @@ function renderCarDetails() {
     breadcrumbName.textContent = car.name;
   }
   
+  const avgRating = calculateAverageRating(car.reviews || []);
+  const reviewCount = car.reviews ? car.reviews.length : 0;
+  
   container.innerHTML = `
     <div class="car-details-grid">
       <div class="car-gallery">
@@ -187,6 +206,12 @@ function renderCarDetails() {
       <div class="car-info">
         <span class="car-type">${car.type}</span>
         <h1>${car.name}</h1>
+        ${avgRating > 0 ? `
+          <div class="rating-summary-large">
+            ${renderStars(avgRating)}
+            <span class="rating-text">${avgRating.toFixed(1)} out of 5 (${reviewCount} ${reviewCount === 1 ? 'review' : 'reviews'})</span>
+          </div>
+        ` : ''}
         <p class="description">${car.description}</p>
         
         <div class="specs-grid">
@@ -236,7 +261,14 @@ function renderCarDetails() {
         </a>
       </div>
     </div>
+    
+    ${car.reviews && car.reviews.length > 0 ? renderReviewsSection(car.reviews) : ''}
   `;
+  
+  // Initialize review filters if reviews exist
+  if (car.reviews && car.reviews.length > 0) {
+    initReviewFilters(car.reviews);
+  }
 }
 
 // ============================================
@@ -667,4 +699,476 @@ function formatCurrency(amount) {
     style: 'currency',
     currency: 'USD'
   }).format(amount);
+}
+
+// ============================================
+// Review & Rating Functions
+// ============================================
+
+// Calculate average rating from reviews
+function calculateAverageRating(reviews) {
+  if (!reviews || reviews.length === 0) return 0;
+  const sum = reviews.reduce((acc, review) => acc + review.rating, 0);
+  return sum / reviews.length;
+}
+
+// Render star rating display
+function renderStars(rating) {
+  const fullStars = Math.floor(rating);
+  const hasHalfStar = rating % 1 >= 0.5;
+  const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+  
+  let stars = '';
+  
+  // Full stars
+  for (let i = 0; i < fullStars; i++) {
+    stars += '<span class="star star-full">★</span>';
+  }
+  
+  // Half star
+  if (hasHalfStar) {
+    stars += '<span class="star star-half">★</span>';
+  }
+  
+  // Empty stars
+  for (let i = 0; i < emptyStars; i++) {
+    stars += '<span class="star star-empty">★</span>';
+  }
+  
+  return `<div class="stars">${stars}</div>`;
+}
+
+// Format date for display
+function formatReviewDate(dateString) {
+  const date = new Date(dateString);
+  return date.toLocaleDateString('en-US', { 
+    year: 'numeric', 
+    month: 'long', 
+    day: 'numeric' 
+  });
+}
+
+// Render reviews section
+function renderReviewsSection(reviews) {
+  const avgRating = calculateAverageRating(reviews);
+  const reviewCount = reviews.length;
+  
+  // Calculate rating distribution
+  const distribution = [5, 4, 3, 2, 1].map(rating => {
+    const count = reviews.filter(r => r.rating === rating).length;
+    const percentage = reviewCount > 0 ? (count / reviewCount) * 100 : 0;
+    return { rating, count, percentage };
+  });
+  
+  return `
+    <div class="reviews-section">
+      <div class="reviews-header">
+        <h2>Customer Reviews</h2>
+        <div class="review-summary">
+          <div class="summary-score">
+            <div class="score-number">${avgRating.toFixed(1)}</div>
+            ${renderStars(avgRating)}
+            <div class="score-text">${reviewCount} ${reviewCount === 1 ? 'review' : 'reviews'}</div>
+          </div>
+          <div class="rating-distribution">
+            ${distribution.map(d => `
+              <div class="rating-bar">
+                <span class="rating-label">${d.rating} ★</span>
+                <div class="bar-container">
+                  <div class="bar-fill" style="width: ${d.percentage}%"></div>
+                </div>
+                <span class="rating-count">${d.count}</span>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      </div>
+      
+      <div class="reviews-filters">
+        <label>Filter by rating:</label>
+        <select id="review-filter">
+          <option value="all">All reviews</option>
+          <option value="5">5 stars</option>
+          <option value="4">4 stars</option>
+          <option value="3">3 stars</option>
+          <option value="2">2 stars</option>
+          <option value="1">1 star</option>
+        </select>
+      </div>
+      
+      <div class="reviews-list" id="reviews-list">
+        ${renderReviewsList(reviews)}
+      </div>
+    </div>
+  `;
+}
+
+// Render individual reviews
+function renderReviewsList(reviews) {
+  if (!reviews || reviews.length === 0) {
+    return '<p class="no-reviews">No reviews match your filter.</p>';
+  }
+  
+  return reviews.map(review => {
+    const authorInitial = review.author && review.author.length > 0 ? review.author.charAt(0) : 'U';
+    return `
+    <article class="review-card">
+      <div class="review-header">
+        <div class="review-author">
+          <div class="author-avatar">${authorInitial}</div>
+          <div>
+            <div class="author-name">${review.author}</div>
+            <div class="review-date">${formatReviewDate(review.date)}</div>
+          </div>
+        </div>
+        ${renderStars(review.rating)}
+      </div>
+      <p class="review-comment">${review.comment}</p>
+      <div class="review-footer">
+        <button class="helpful-btn" disabled aria-label="Mark review as helpful">
+          👍 Helpful (${review.helpful_count})
+        </button>
+      </div>
+    </article>
+  `;
+  }).join('');
+}
+
+// Initialize review filters
+function initReviewFilters(reviews) {
+  const filterSelect = document.getElementById('review-filter');
+  
+  if (filterSelect) {
+    filterSelect.addEventListener('change', function() {
+      const rating = this.value;
+      let filteredReviews = reviews;
+      
+      if (rating !== 'all') {
+        filteredReviews = reviews.filter(r => r.rating === parseInt(rating));
+      }
+      
+      const reviewsList = document.getElementById('reviews-list');
+      if (reviewsList) {
+        reviewsList.innerHTML = renderReviewsList(filteredReviews);
+      }
+    });
+  }
+}
+
+// ============================================
+// Range Calculator
+// ============================================
+function initRangeCalculator() {
+  const vehicleSelect = document.getElementById('vehicle-select');
+  const calculateBtn = document.getElementById('calculate-btn');
+  
+  if (!vehicleSelect || !calculateBtn) return;
+  
+  // Populate vehicle select with EVs only
+  populateRangeVehicleSelect();
+  
+  // Calculate button click handler
+  calculateBtn.addEventListener('click', calculateRange);
+}
+
+// ============================================
+// Charging Cost Calculator
+// ============================================
+
+// Charging rates ($/kWh)
+const CHARGING_RATES = {
+  home: 0.12,
+  public: 0.30,
+  dcfast: 0.45
+};
+
+// Fuel costs ($/liter)
+const FUEL_COSTS = {
+  petrol: 1.50,
+  diesel: 1.60
+};
+
+// Traditional vehicle efficiency (liters/100km)
+const TRADITIONAL_EFFICIENCY = {
+  petrol: 8,
+  diesel: 6
+};
+
+// Charging efficiency (account for charging losses)
+const CHARGING_EFFICIENCY = 0.90;
+
+function initChargingCalculator() {
+  const form = document.getElementById('charging-calculator-form');
+  const vehicleSelect = document.getElementById('charging-vehicle-select');
+  
+  if (!form || !vehicleSelect) return;
+  
+  // Populate vehicle select with electric and hybrid vehicles
+  populateChargingVehicleSelect();
+  
+  // Handle form submission
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    calculateChargingCosts();
+  });
+}
+
+function populateRangeVehicleSelect() {
+  const select = document.getElementById('vehicle-select');
+  if (!select) return;
+  
+  // Filter for electric vehicles only
+  const evs = carsData.filter(car => car.fuelType === 'Electric' && car.range);
+  
+  evs.forEach(car => {
+    const option = document.createElement('option');
+    option.value = car.id;
+    option.textContent = `${car.name} (${car.range} km range)`;
+    select.appendChild(option);
+  });
+}
+
+function populateChargingVehicleSelect() {
+  const select = document.getElementById('charging-vehicle-select');
+  if (!select) return;
+  
+  // Filter for electric and hybrid vehicles with efficiency data
+  const evAndHybridCars = carsData.filter(car => 
+    (car.fuelType === 'Electric' || car.fuelType === 'Hybrid') && 
+    car.efficiency && 
+    car.batteryCapacity
+  );
+  
+  evAndHybridCars.forEach(car => {
+    const option = document.createElement('option');
+    option.value = car.id;
+    option.textContent = `${car.name} (${car.fuelType}) - ${car.efficiency} kWh/100km`;
+    select.appendChild(option);
+  });
+}
+
+function calculateRange() {
+  // Get form values
+  const vehicleId = document.getElementById('vehicle-select').value;
+  const tripDistance = parseFloat(document.getElementById('trip-distance').value);
+  const weatherFactor = parseFloat(document.getElementById('weather-select').value);
+  const drivingStyleFactor = parseFloat(document.getElementById('driving-style').value);
+  const terrainFactor = parseFloat(document.getElementById('terrain-select').value);
+  
+  // Validate inputs
+  if (!vehicleId) {
+    alert('Please select a vehicle');
+    return;
+  }
+  
+  if (!tripDistance || tripDistance <= 0) {
+    alert('Please enter a valid trip distance');
+    return;
+  }
+  
+  // Find the selected vehicle
+  const vehicle = carsData.find(car => car.id === vehicleId);
+  
+  if (!vehicle || !vehicle.range) {
+    alert('Vehicle range data not available');
+    return;
+  }
+  
+  // Calculate estimated range
+  const baseRange = vehicle.range;
+  const estimatedRange = Math.round(baseRange * weatherFactor * drivingStyleFactor * terrainFactor);
+  
+  // Calculate range percentage used
+  const rangePercentage = Math.min((estimatedRange / tripDistance) * 100, 100);
+  
+  // Determine trip status
+  let tripStatus = '';
+  let statusClass = '';
+  let recommendation = '';
+  
+  if (estimatedRange >= tripDistance * 1.3) {
+    tripStatus = '✅ Excellent! This vehicle can easily complete your trip.';
+    statusClass = 'success';
+    recommendation = 'You have plenty of range for this trip. Consider using Eco mode to maximize efficiency and potentially save even more energy.';
+  } else if (estimatedRange >= tripDistance * 1.1) {
+    tripStatus = '✓ Good! This vehicle should complete your trip comfortably.';
+    statusClass = 'success';
+    recommendation = 'You have sufficient range for this trip. Drive conservatively and use regenerative braking to maximize your range.';
+  } else if (estimatedRange >= tripDistance) {
+    tripStatus = '⚠️ Possible! This vehicle can complete your trip, but with limited buffer.';
+    statusClass = 'warning';
+    recommendation = 'You can complete this trip, but we recommend using Eco mode, driving conservatively, and planning a charging stop if possible for peace of mind.';
+  } else {
+    const chargingStops = Math.ceil(tripDistance / estimatedRange);
+    tripStatus = `⚡ Charging Required! You'll need ${chargingStops} charging stop(s).`;
+    statusClass = 'error';
+    recommendation = `This trip exceeds the vehicle's range. Plan for ${chargingStops} charging stop(s) along your route. DC fast charging typically takes 20-30 minutes to reach 80% capacity.`;
+  }
+  
+  // Display results
+  displayRangeResults(vehicle, estimatedRange, tripDistance, rangePercentage, tripStatus, statusClass, recommendation);
+}
+
+function displayRangeResults(vehicle, estimatedRange, tripDistance, rangePercentage, tripStatus, statusClass, recommendation) {
+  const resultsPanel = document.getElementById('results-panel');
+  
+  if (!resultsPanel) return;
+  
+  resultsPanel.innerHTML = `
+    <div class="results-content">
+      <h2>Range Analysis</h2>
+      
+      <div class="vehicle-info">
+        <h3>${vehicle.name}</h3>
+        <p><strong>Base Range:</strong> ${vehicle.range} km</p>
+        <p><strong>Battery Capacity:</strong> ${vehicle.batteryCapacity} kWh</p>
+        <p><strong>Efficiency:</strong> ${vehicle.efficiency} kWh/100km</p>
+      </div>
+      
+      <div class="trip-status ${statusClass}">
+        ${tripStatus}
+      </div>
+      
+      <div class="range-indicator">
+        <div class="range-bar">
+          <div class="range-fill ${rangePercentage >= 110 ? '' : rangePercentage >= 100 ? 'warning' : 'critical'}" 
+               style="width: ${Math.min(rangePercentage, 100)}%">
+            ${rangePercentage.toFixed(0)}%
+          </div>
+        </div>
+        <div class="range-stats">
+          <div class="stat">
+            <span class="stat-value">${estimatedRange}</span>
+            <span class="stat-label">Estimated Range (km)</span>
+          </div>
+          <div class="stat">
+            <span class="stat-value">${tripDistance}</span>
+            <span class="stat-label">Trip Distance (km)</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="trip-recommendation">
+        <h4>💡 Recommendation</h4>
+        <p>${recommendation}</p>
+      </div>
+    </div>
+  `;
+}
+
+function calculateChargingCosts() {
+  const vehicleId = document.getElementById('charging-vehicle-select').value;
+  const distance = parseFloat(document.getElementById('charging-trip-distance').value);
+  const chargingType = document.getElementById('charging-type').value;
+  const customRate = document.getElementById('custom-rate').value;
+  
+  if (!vehicleId || !distance) {
+    alert('Please select a vehicle and enter trip distance');
+    return;
+  }
+  
+  const vehicle = carsData.find(car => car.id === vehicleId);
+  if (!vehicle) return;
+  
+  // Get electricity rate
+  const electricityRate = customRate ? parseFloat(customRate) : CHARGING_RATES[chargingType];
+  
+  // Calculate EV costs
+  // Energy needed = (distance / 100) * efficiency / charging_efficiency
+  const energyNeeded = (distance / 100) * vehicle.efficiency / CHARGING_EFFICIENCY;
+  const evCost = energyNeeded * electricityRate;
+  const evCostPerKm = evCost / distance;
+  
+  // Calculate traditional fuel costs (use petrol as baseline)
+  const fuelNeeded = (distance / 100) * TRADITIONAL_EFFICIENCY.petrol;
+  const fuelCost = fuelNeeded * FUEL_COSTS.petrol;
+  const fuelCostPerKm = fuelCost / distance;
+  
+  // Calculate savings
+  const savings = fuelCost - evCost;
+  const percentageSaved = (savings / fuelCost) * 100;
+  
+  // Display results
+  displayChargingResults({
+    vehicle,
+    distance,
+    energyNeeded,
+    evCost,
+    evCostPerKm,
+    fuelNeeded,
+    fuelCost,
+    fuelCostPerKm,
+    savings,
+    percentageSaved,
+    electricityRate,
+    chargingType
+  });
+  
+  // Show results section
+  const resultsSection = document.getElementById('calculator-results');
+  if (resultsSection) {
+    resultsSection.style.display = 'block';
+    resultsSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+}
+
+function displayChargingResults(data) {
+  // EV costs
+  document.getElementById('ev-energy').textContent = `${data.energyNeeded.toFixed(2)} kWh`;
+  document.getElementById('ev-cost').textContent = formatCurrency(data.evCost);
+  document.getElementById('ev-per-km').textContent = formatCurrency(data.evCostPerKm);
+  
+  // Fuel costs
+  document.getElementById('fuel-volume').textContent = `${data.fuelNeeded.toFixed(2)} liters`;
+  document.getElementById('fuel-cost').textContent = formatCurrency(data.fuelCost);
+  document.getElementById('fuel-per-km').textContent = formatCurrency(data.fuelCostPerKm);
+  
+  // Savings
+  const savingsEl = document.getElementById('total-savings');
+  const percentageEl = document.getElementById('percentage-saved');
+  const messageEl = document.getElementById('savings-message');
+  
+  if (data.savings > 0) {
+    savingsEl.textContent = formatCurrency(data.savings);
+    savingsEl.style.color = 'var(--color-success)';
+    percentageEl.textContent = `${data.percentageSaved.toFixed(1)}%`;
+    percentageEl.style.color = 'var(--color-success)';
+    messageEl.textContent = `🎉 You'll save ${formatCurrency(data.savings)} on this ${data.distance}km trip by choosing electric!`;
+    messageEl.style.color = 'var(--color-success)';
+  } else {
+    savingsEl.textContent = formatCurrency(Math.abs(data.savings));
+    savingsEl.style.color = 'var(--color-error)';
+    percentageEl.textContent = `${Math.abs(data.percentageSaved).toFixed(1)}% more`;
+    percentageEl.style.color = 'var(--color-error)';
+    messageEl.textContent = `Electric charging costs slightly more in this scenario, but you're still helping the environment!`;
+    messageEl.style.color = 'var(--color-gray)';
+  }
+  
+  // Charging options comparison
+  displayChargingOptions(data);
+}
+
+function displayChargingOptions(data) {
+  const tbody = document.getElementById('charging-options-body');
+  if (!tbody) return;
+  
+  const chargingTypes = [
+    { type: 'Home', rate: CHARGING_RATES.home, key: 'home' },
+    { type: 'Public', rate: CHARGING_RATES.public, key: 'public' },
+    { type: 'DC Fast', rate: CHARGING_RATES.dcfast, key: 'dcfast' }
+  ];
+  
+  tbody.innerHTML = chargingTypes.map(charging => {
+    const cost = data.energyNeeded * charging.rate;
+    const isSelected = data.chargingType === charging.key;
+    const rowClass = isSelected ? 'class="selected-row"' : '';
+    
+    return `
+      <tr ${rowClass}>
+        <td>${charging.type}${isSelected ? ' ⭐' : ''}</td>
+        <td>$${charging.rate.toFixed(2)}/kWh</td>
+        <td><strong>${formatCurrency(cost)}</strong></td>
+      </tr>
+    `;
+  }).join('');
 }

@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Calculate your EV charging costs and compare with traditional fuel expenses. See how much you can save with electric vehicles.">
+  <title>Charging Cost Calculator - EV Car Rental</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="container">
+      <a href="index.html" class="logo">
+        <span class="logo-icon">🚗</span>
+        EV Car Rental
+      </a>
+      
+      <nav class="nav-desktop">
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="cars.html">Our Cars</a></li>
+          <li><a href="booking.html">Book Now</a></li>
+          <li><a href="loyalty.html">Rewards</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+      
+      <button class="menu-toggle" aria-label="Toggle menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      
+      <nav class="nav-mobile">
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="cars.html">Our Cars</a></li>
+          <li><a href="booking.html">Book Now</a></li>
+          <li><a href="loyalty.html">Rewards</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Breadcrumb -->
+  <div class="breadcrumb">
+    <div class="container">
+      <a href="index.html">Home</a>
+      <span>/</span>
+      <span>Charging Cost Calculator</span>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <main class="section">
+    <div class="container">
+      <div class="section-header">
+        <h1>⚡ Charging Cost Calculator</h1>
+        <p>Compare the cost of charging an electric vehicle versus fueling a traditional car. See how much you can save!</p>
+      </div>
+
+      <div class="calculator-layout">
+        <!-- Calculator Form -->
+        <div class="calculator-card">
+          <h2>Trip & Vehicle Details</h2>
+          
+          <form id="charging-calculator-form">
+            <div class="form-group">
+              <label for="vehicle-select">Select Vehicle</label>
+              <select id="vehicle-select" required>
+                <option value="">Choose an electric or hybrid vehicle...</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="trip-distance">Trip Distance (km)</label>
+              <input 
+                type="number" 
+                id="trip-distance" 
+                min="1" 
+                max="10000" 
+                value="100" 
+                required
+              >
+              <small>Enter the total distance you plan to travel</small>
+            </div>
+
+            <div class="form-group">
+              <label for="charging-type">Charging Type</label>
+              <select id="charging-type" required>
+                <option value="home">Home Charging ($0.12/kWh)</option>
+                <option value="public">Public Charging ($0.30/kWh)</option>
+                <option value="dcfast">DC Fast Charging ($0.45/kWh)</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="custom-rate">Custom Electricity Rate ($/kWh)</label>
+              <input 
+                type="number" 
+                id="custom-rate" 
+                min="0" 
+                max="10" 
+                step="0.01" 
+                placeholder="Optional - leave blank to use preset rates"
+              >
+              <small>Override the preset rate with your local electricity rate</small>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-lg" style="width: 100%;">
+              Calculate Costs
+            </button>
+          </form>
+        </div>
+
+        <!-- Results Display -->
+        <div class="calculator-results" id="calculator-results" style="display: none;">
+          <h2>Cost Comparison</h2>
+          
+          <div class="result-card result-ev">
+            <div class="result-header">
+              <span class="result-icon">⚡</span>
+              <h3>Electric Vehicle Cost</h3>
+            </div>
+            <div class="result-details">
+              <div class="result-row">
+                <span>Energy Needed:</span>
+                <strong id="ev-energy">--</strong>
+              </div>
+              <div class="result-row">
+                <span>Charging Cost:</span>
+                <strong id="ev-cost" class="result-amount">--</strong>
+              </div>
+              <div class="result-row">
+                <span>Cost per km:</span>
+                <strong id="ev-per-km">--</strong>
+              </div>
+            </div>
+          </div>
+
+          <div class="result-card result-fuel">
+            <div class="result-header">
+              <span class="result-icon">⛽</span>
+              <h3>Traditional Fuel Cost</h3>
+            </div>
+            <div class="result-details">
+              <div class="result-row">
+                <span>Fuel Needed:</span>
+                <strong id="fuel-volume">--</strong>
+              </div>
+              <div class="result-row">
+                <span>Fuel Cost:</span>
+                <strong id="fuel-cost" class="result-amount">--</strong>
+              </div>
+              <div class="result-row">
+                <span>Cost per km:</span>
+                <strong id="fuel-per-km">--</strong>
+              </div>
+            </div>
+          </div>
+
+          <div class="result-card result-savings">
+            <div class="result-header">
+              <span class="result-icon">💰</span>
+              <h3>Your Savings</h3>
+            </div>
+            <div class="result-details">
+              <div class="result-row">
+                <span>Total Savings:</span>
+                <strong id="total-savings" class="result-amount savings-amount">--</strong>
+              </div>
+              <div class="result-row">
+                <span>Percentage Saved:</span>
+                <strong id="percentage-saved" class="savings-percent">--</strong>
+              </div>
+              <p class="savings-message" id="savings-message"></p>
+            </div>
+          </div>
+
+          <!-- Charging Options Breakdown -->
+          <div class="result-card">
+            <h3>Compare Charging Options</h3>
+            <div class="charging-options-table">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Charging Type</th>
+                    <th>Rate</th>
+                    <th>Cost</th>
+                  </tr>
+                </thead>
+                <tbody id="charging-options-body">
+                  <!-- Populated by JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Info Section -->
+      <div class="info-section">
+        <h2>Understanding EV Charging Costs</h2>
+        <div class="info-grid">
+          <div class="info-card">
+            <h3>🏠 Home Charging</h3>
+            <p><strong>$0.12/kWh average</strong></p>
+            <p>The most economical option. Charge overnight at home using standard residential electricity rates. Perfect for daily commutes and regular use.</p>
+          </div>
+          
+          <div class="info-card">
+            <h3>🔌 Public Charging</h3>
+            <p><strong>$0.30/kWh average</strong></p>
+            <p>Available at shopping centers, parking lots, and dedicated charging stations. Convenient for longer trips and when away from home.</p>
+          </div>
+          
+          <div class="info-card">
+            <h3>⚡ DC Fast Charging</h3>
+            <p><strong>$0.45/kWh average</strong></p>
+            <p>Rapid charging for long-distance travel. Can charge up to 80% in 30 minutes. Higher cost but excellent for road trips and time-sensitive situations.</p>
+          </div>
+        </div>
+
+        <div class="assumptions-box">
+          <h3>Calculation Assumptions</h3>
+          <ul>
+            <li><strong>Petrol fuel cost:</strong> $1.50/liter</li>
+            <li><strong>Diesel fuel cost:</strong> $1.60/liter</li>
+            <li><strong>Traditional vehicle efficiency:</strong> 8 liters/100km (petrol), 6 liters/100km (diesel)</li>
+            <li><strong>EV efficiency:</strong> Based on the specific vehicle selected</li>
+            <li><strong>Charging efficiency:</strong> 90% (accounting for charging losses)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-section">
+          <h3>EV Car Rental</h3>
+          <p>Your trusted partner for quality car rentals since 2020. We're committed to providing reliable vehicles and exceptional customer service.</p>
+        </div>
+        
+        <div class="footer-section">
+          <h3>Quick Links</h3>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="cars.html">Our Cars</a></li>
+            <li><a href="booking.html">Book Now</a></li>
+            <li><a href="loyalty.html">Rewards</a></li>
+            <li><a href="about.html">About Us</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-section">
+          <h3>Vehicle Types</h3>
+          <ul>
+            <li><a href="cars.html">Sedans</a></li>
+            <li><a href="cars.html">SUVs</a></li>
+            <li><a href="cars.html">Electric Cars</a></li>
+            <li><a href="cars.html">Luxury Cars</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-section">
+          <h3>Contact Us</h3>
+          <ul>
+            <li>📍 123 Rental Street, City</li>
+            <li>📞 +1 (555) 123-4567</li>
+            <li>✉️ info@evcarrental.com</li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="footer-bottom">
+        <p>&copy; 2026 EV Car Rental. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
