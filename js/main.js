@@ -437,6 +437,22 @@ function handleBookingSubmit(e) {
   }
   
   if (isValid) {
+    // Calculate carbon footprint
+    const carSelect = form.querySelector('#car-select');
+    const pickupDate = form.querySelector('#pickup-date');
+    const returnDate = form.querySelector('#return-date');
+    
+    if (carSelect && pickupDate && returnDate) {
+      const selectedCarId = carSelect.value;
+      const car = carsData.find(c => c.id === selectedCarId);
+      
+      if (car) {
+        const days = calculateDaysBetween(pickupDate.value, returnDate.value);
+        const carbonData = calculateCarbonFootprint(car, days);
+        displayCarbonFootprint(carbonData);
+      }
+    }
+    
     // Show success message
     const successMsg = document.getElementById('success-message');
     if (successMsg) {
@@ -446,10 +462,10 @@ function handleBookingSubmit(e) {
       // Scroll to success message
       successMsg.scrollIntoView({ behavior: 'smooth' });
       
-      // Hide after 5 seconds
+      // Hide after 10 seconds (extended to show carbon data)
       setTimeout(() => {
         successMsg.classList.remove('show');
-      }, 5000);
+      }, 10000);
     }
   }
 }
@@ -519,6 +535,184 @@ function isValidEmail(email) {
 function isValidPhone(phone) {
   const re = /^[\d\s\-\+\(\)]{10,}$/;
   return re.test(phone);
+}
+
+// ============================================
+// Carbon Footprint Calculator Functions
+// ============================================
+
+/**
+ * Calculate days between two dates
+ */
+function calculateDaysBetween(startDate, endDate) {
+  const start = new Date(startDate);
+  const end = new Date(endDate);
+  const diffTime = Math.abs(end - start);
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  return diffDays || 1;
+}
+
+/**
+ * Calculate carbon footprint savings
+ * Technical Notes:
+ * - Average petrol car: 120g CO2/km
+ * - EV (grid mix): ~40g CO2/km
+ * - Net savings: ~80g CO2/km
+ * - 1 tree absorbs ~22kg CO2/year
+ */
+function calculateCarbonFootprint(car, days) {
+  // Assume average 50km per day for rental
+  const avgKmPerDay = 50;
+  const totalKm = avgKmPerDay * days;
+  
+  // CO2 emissions constants (in grams per km)
+  const petrolCarEmissions = 120; // g CO2/km
+  const evEmissions = 40; // g CO2/km
+  
+  let co2Saved = 0;
+  let actualEmissions = 0;
+  
+  // Calculate based on fuel type
+  if (car.fuelType === 'Electric') {
+    actualEmissions = evEmissions * totalKm;
+    co2Saved = (petrolCarEmissions - evEmissions) * totalKm;
+  } else if (car.fuelType === 'Hybrid') {
+    // Hybrid cars produce about 70g CO2/km (better than petrol, not as good as EV)
+    const hybridEmissions = 70;
+    actualEmissions = hybridEmissions * totalKm;
+    co2Saved = (petrolCarEmissions - hybridEmissions) * totalKm;
+  } else {
+    // Petrol/Diesel cars
+    actualEmissions = petrolCarEmissions * totalKm;
+    co2Saved = 0; // No savings for non-eco vehicles
+  }
+  
+  // Convert to kg
+  const co2SavedKg = co2Saved / 1000;
+  
+  // Calculate tree equivalents (1 tree absorbs ~22kg CO2/year)
+  const treeYearEquivalent = co2SavedKg / 22;
+  
+  return {
+    carName: car.name,
+    fuelType: car.fuelType,
+    days: days,
+    totalKm: totalKm,
+    co2SavedGrams: co2Saved,
+    co2SavedKg: co2SavedKg.toFixed(2),
+    actualEmissionsKg: (actualEmissions / 1000).toFixed(2),
+    treeYearEquivalent: treeYearEquivalent.toFixed(2),
+    isEcoFriendly: car.fuelType === 'Electric' || car.fuelType === 'Hybrid'
+  };
+}
+
+/**
+ * Display carbon footprint information
+ */
+function displayCarbonFootprint(carbonData) {
+  const successMsg = document.getElementById('success-message');
+  if (!successMsg) return;
+  
+  if (!carbonData.isEcoFriendly) {
+    // Don't show carbon footprint for non-eco vehicles
+    return;
+  }
+  
+  // Create or get carbon display element
+  let carbonDisplay = document.getElementById('carbon-display');
+  if (!carbonDisplay) {
+    carbonDisplay = document.createElement('div');
+    carbonDisplay.id = 'carbon-display';
+    carbonDisplay.className = 'carbon-display';
+    successMsg.appendChild(carbonDisplay);
+  }
+  
+  // Build the display content
+  const trees = Math.floor(carbonData.treeYearEquivalent);
+  const treeEmoji = '🌳'.repeat(Math.min(trees, 5)); // Show max 5 tree emojis
+  
+  carbonDisplay.innerHTML = `
+    <div class="carbon-header">
+      <h3>🌍 Your Environmental Impact</h3>
+    </div>
+    <div class="carbon-stats">
+      <div class="carbon-stat-item">
+        <div class="carbon-value">${carbonData.co2SavedKg} kg</div>
+        <div class="carbon-label">CO₂ Saved vs. Petrol Car</div>
+      </div>
+      <div class="carbon-stat-item">
+        <div class="carbon-value">${carbonData.treeYearEquivalent}</div>
+        <div class="carbon-label">Tree-Year Equivalent</div>
+      </div>
+    </div>
+    <div class="carbon-visualization">
+      <div class="tree-display">${treeEmoji || '🌱'}</div>
+      <p class="carbon-description">
+        By choosing a ${carbonData.fuelType} vehicle for ${carbonData.days} ${carbonData.days === 1 ? 'day' : 'days'}, 
+        you're saving approximately ${carbonData.co2SavedKg}kg of CO₂ emissions!
+      </p>
+    </div>
+    <div class="carbon-badge">
+      <div class="badge-icon">🏆</div>
+      <div class="badge-text">
+        <strong>Eco Champion!</strong><br>
+        <small>Share your green choice on social media</small>
+      </div>
+    </div>
+    <div class="carbon-share">
+      <button class="btn-share" onclick="shareCarbonFootprint(${JSON.stringify(carbonData).replace(/"/g, '&quot;')})">
+        Share My Green Badge
+      </button>
+    </div>
+  `;
+}
+
+/**
+ * Share carbon footprint on social media
+ */
+function shareCarbonFootprint(carbonData) {
+  const text = `🌍 I'm going green with EV Car Rental! By choosing a ${carbonData.fuelType} vehicle, I'm saving ${carbonData.co2SavedKg}kg of CO₂ emissions - equivalent to ${carbonData.treeYearEquivalent} tree-years! 🌳 #EcoFriendly #EVRental #GoGreen`;
+  
+  // Check if Web Share API is available
+  if (navigator.share) {
+    navigator.share({
+      title: 'My Green Rental Choice',
+      text: text,
+      url: window.location.origin
+    }).catch(() => {
+      // Fallback to clipboard copy
+      copyToClipboard(text);
+    });
+  } else {
+    // Fallback to clipboard copy
+    copyToClipboard(text);
+  }
+}
+
+/**
+ * Copy text to clipboard
+ */
+function copyToClipboard(text) {
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(text).then(() => {
+      alert('Green badge message copied to clipboard! Paste it to share on social media.');
+    });
+  } else {
+    // Fallback for older browsers
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    textarea.style.position = 'fixed';
+    textarea.style.opacity = '0';
+    document.body.appendChild(textarea);
+    textarea.select();
+    try {
+      document.execCommand('copy');
+      alert('Green badge message copied to clipboard! Paste it to share on social media.');
+    } catch (err) {
+      alert('Unable to copy. Please share manually: ' + text);
+    }
+    document.body.removeChild(textarea);
+  }
 }
 
 // ============================================
