@@ -21,10 +21,14 @@ document.addEventListener('DOMContentLoaded', function() {
   const featuredCars = document.getElementById('featured-cars');
   const carSelect = document.getElementById('car-select');
   const carDetailsContainer = document.getElementById('car-details-container');
+  const vehicleSelect = document.getElementById('vehicle-select');
   
-  if (carsGrid || featuredCars || carSelect || carDetailsContainer) {
+  if (carsGrid || featuredCars || carSelect || carDetailsContainer || vehicleSelect) {
     loadCarsData();
   }
+  
+  // Initialize Range Calculator
+  initRangeCalculator();
 });
 
 // ============================================
@@ -661,4 +665,144 @@ function initReviewFilters(reviews) {
       }
     });
   }
+}
+
+// ============================================
+// Range Calculator
+// ============================================
+function initRangeCalculator() {
+  const vehicleSelect = document.getElementById('vehicle-select');
+  const calculateBtn = document.getElementById('calculate-btn');
+  
+  if (!vehicleSelect || !calculateBtn) return;
+  
+  // Populate vehicle select with EVs only
+  populateVehicleSelect();
+  
+  // Calculate button click handler
+  calculateBtn.addEventListener('click', calculateRange);
+}
+
+function populateVehicleSelect() {
+  const select = document.getElementById('vehicle-select');
+  if (!select) return;
+  
+  // Filter for electric vehicles only
+  const evs = carsData.filter(car => car.fuelType === 'Electric' && car.range);
+  
+  evs.forEach(car => {
+    const option = document.createElement('option');
+    option.value = car.id;
+    option.textContent = `${car.name} (${car.range} km range)`;
+    select.appendChild(option);
+  });
+}
+
+function calculateRange() {
+  // Get form values
+  const vehicleId = document.getElementById('vehicle-select').value;
+  const tripDistance = parseFloat(document.getElementById('trip-distance').value);
+  const weatherFactor = parseFloat(document.getElementById('weather-select').value);
+  const drivingStyleFactor = parseFloat(document.getElementById('driving-style').value);
+  const terrainFactor = parseFloat(document.getElementById('terrain-select').value);
+  
+  // Validate inputs
+  if (!vehicleId) {
+    alert('Please select a vehicle');
+    return;
+  }
+  
+  if (!tripDistance || tripDistance <= 0) {
+    alert('Please enter a valid trip distance');
+    return;
+  }
+  
+  // Find the selected vehicle
+  const vehicle = carsData.find(car => car.id === vehicleId);
+  
+  if (!vehicle || !vehicle.range) {
+    alert('Vehicle range data not available');
+    return;
+  }
+  
+  // Calculate estimated range
+  const baseRange = vehicle.range;
+  const estimatedRange = Math.round(baseRange * weatherFactor * drivingStyleFactor * terrainFactor);
+  
+  // Calculate range percentage used
+  const rangePercentage = Math.min((estimatedRange / tripDistance) * 100, 100);
+  
+  // Determine trip status
+  let tripStatus = '';
+  let statusClass = '';
+  let recommendation = '';
+  
+  if (estimatedRange >= tripDistance * 1.3) {
+    tripStatus = '✅ Excellent! This vehicle can easily complete your trip.';
+    statusClass = 'success';
+    recommendation = 'You have plenty of range for this trip. Consider using Eco mode to maximize efficiency and potentially save even more energy.';
+  } else if (estimatedRange >= tripDistance * 1.1) {
+    tripStatus = '✓ Good! This vehicle should complete your trip comfortably.';
+    statusClass = 'success';
+    recommendation = 'You have sufficient range for this trip. Drive conservatively and use regenerative braking to maximize your range.';
+  } else if (estimatedRange >= tripDistance) {
+    tripStatus = '⚠️ Possible! This vehicle can complete your trip, but with limited buffer.';
+    statusClass = 'warning';
+    recommendation = 'You can complete this trip, but we recommend using Eco mode, driving conservatively, and planning a charging stop if possible for peace of mind.';
+  } else {
+    const chargingStops = Math.ceil(tripDistance / estimatedRange);
+    tripStatus = `⚡ Charging Required! You'll need ${chargingStops} charging stop(s).`;
+    statusClass = 'error';
+    recommendation = `This trip exceeds the vehicle's range. Plan for ${chargingStops} charging stop(s) along your route. DC fast charging typically takes 20-30 minutes to reach 80% capacity.`;
+  }
+  
+  // Display results
+  displayResults(vehicle, estimatedRange, tripDistance, rangePercentage, tripStatus, statusClass, recommendation);
+}
+
+function displayResults(vehicle, estimatedRange, tripDistance, rangePercentage, tripStatus, statusClass, recommendation) {
+  const resultsPanel = document.getElementById('results-panel');
+  
+  if (!resultsPanel) return;
+  
+  resultsPanel.innerHTML = `
+    <div class="results-content">
+      <h2>Range Analysis</h2>
+      
+      <div class="vehicle-info">
+        <h3>${vehicle.name}</h3>
+        <p><strong>Base Range:</strong> ${vehicle.range} km</p>
+        <p><strong>Battery Capacity:</strong> ${vehicle.batteryCapacity} kWh</p>
+        <p><strong>Efficiency:</strong> ${vehicle.efficiency} kWh/100km</p>
+      </div>
+      
+      <div class="trip-status ${statusClass}">
+        ${tripStatus}
+      </div>
+      
+      <div class="range-indicator">
+        <div class="range-bar">
+          <div class="range-fill ${rangePercentage >= 110 ? '' : rangePercentage >= 100 ? 'warning' : 'critical'}" 
+               style="width: ${Math.min(rangePercentage, 100)}%">
+            ${rangePercentage.toFixed(0)}%
+          </div>
+        </div>
+        <div class="range-stats">
+          <div class="stat">
+            <span class="stat-value">${estimatedRange}</span>
+            <span class="stat-label">Estimated Range (km)</span>
+          </div>
+          <div class="stat">
+            <span class="stat-value">${tripDistance}</span>
+            <span class="stat-label">Trip Distance (km)</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="trip-recommendation">
+        <h4>💡 Recommendation</h4>
+        <p>${recommendation}</p>
+      </div>
+    </div>
+  `;
 }

@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="EV Range Calculator - Plan your electric vehicle trips with confidence. Calculate estimated range based on weather and driving conditions.">
+  <title>Range Calculator & Trip Planner - EV Car Rental</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="container">
+      <a href="index.html" class="logo">
+        <span class="logo-icon">🚗</span>
+        EV Car Rental
+      </a>
+      
+      <nav class="nav-desktop">
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="cars.html">Our Cars</a></li>
+          <li><a href="booking.html">Book Now</a></li>
+          <li><a href="range-calculator.html" class="active">Range Calculator</a></li>
+          <li><a href="loyalty.html">Rewards</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+      
+      <button class="menu-toggle" aria-label="Toggle menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      
+      <nav class="nav-mobile">
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="cars.html">Our Cars</a></li>
+          <li><a href="booking.html">Book Now</a></li>
+          <li><a href="range-calculator.html" class="active">Range Calculator</a></li>
+          <li><a href="loyalty.html">Rewards</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Breadcrumb -->
+  <div class="breadcrumb">
+    <div class="container">
+      <a href="index.html">Home</a>
+      <span class="separator">/</span>
+      <span>Range Calculator</span>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <main>
+    <!-- Page Header -->
+    <section class="page-header">
+      <div class="container">
+        <h1>⚡ EV Range Calculator & Trip Planner</h1>
+        <p class="lead">Plan your electric vehicle trips with confidence. Calculate estimated range based on your trip distance, weather conditions, and driving style.</p>
+      </div>
+    </section>
+
+    <!-- Calculator Section -->
+    <section class="section">
+      <div class="container">
+        <div class="calculator-wrapper">
+          <!-- Calculator Form -->
+          <div class="calculator-form">
+            <h2>Trip Details</h2>
+            
+            <!-- Vehicle Selection -->
+            <div class="form-group">
+              <label for="vehicle-select">Select Electric Vehicle</label>
+              <select id="vehicle-select" required>
+                <option value="">Choose a vehicle...</option>
+              </select>
+            </div>
+
+            <!-- Trip Distance -->
+            <div class="form-group">
+              <label for="trip-distance">Trip Distance (km)</label>
+              <input type="number" id="trip-distance" min="1" max="2000" placeholder="e.g., 150" required>
+              <small class="help-text">Enter your planned one-way trip distance</small>
+            </div>
+
+            <!-- Weather Conditions -->
+            <div class="form-group">
+              <label for="weather-select">Weather Conditions</label>
+              <select id="weather-select" required>
+                <option value="1.0">Mild (15-25°C) - Optimal</option>
+                <option value="0.9">Warm (26-35°C) - AC Usage</option>
+                <option value="0.8">Cold (0-14°C) - Heating Required</option>
+                <option value="0.7">Very Cold (Below 0°C) - Heavy Heating</option>
+              </select>
+              <small class="help-text">Temperature affects battery performance</small>
+            </div>
+
+            <!-- Driving Style -->
+            <div class="form-group">
+              <label for="driving-style">Driving Style</label>
+              <select id="driving-style" required>
+                <option value="1.1">Eco Mode - Gentle acceleration</option>
+                <option value="1.0">Normal - Standard driving</option>
+                <option value="0.85">Highway - High speed (110+ km/h)</option>
+                <option value="0.75">Sporty - Aggressive acceleration</option>
+              </select>
+              <small class="help-text">Driving habits impact range significantly</small>
+            </div>
+
+            <!-- Terrain -->
+            <div class="form-group">
+              <label for="terrain-select">Terrain Type</label>
+              <select id="terrain-select" required>
+                <option value="1.0">Flat - Urban/Suburban</option>
+                <option value="0.9">Rolling Hills - Some elevation</option>
+                <option value="0.8">Mountainous - Significant elevation</option>
+              </select>
+              <small class="help-text">Hills require more energy</small>
+            </div>
+
+            <!-- Calculate Button -->
+            <button type="button" id="calculate-btn" class="btn btn-primary btn-large">
+              Calculate Range
+            </button>
+          </div>
+
+          <!-- Results Panel -->
+          <div class="calculator-results" id="results-panel">
+            <div class="results-placeholder">
+              <div class="icon">📊</div>
+              <p>Select a vehicle and enter trip details to see your range estimate</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Info Cards -->
+        <div class="info-cards">
+          <div class="info-card">
+            <div class="info-card-icon">🔋</div>
+            <h3>Range Factors</h3>
+            <p>Temperature, driving style, speed, and terrain all affect your EV's range. Plan accordingly for optimal performance.</p>
+          </div>
+          
+          <div class="info-card">
+            <div class="info-card-icon">⚡</div>
+            <h3>Charging Tips</h3>
+            <p>For trips exceeding your vehicle's range, plan charging stops at DC fast chargers along your route (typically 20-30 minutes).</p>
+          </div>
+          
+          <div class="info-card">
+            <div class="info-card-icon">🌡️</div>
+            <h3>Weather Impact</h3>
+            <p>Cold weather can reduce range by up to 30%. Pre-condition your vehicle while plugged in to maximize range.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tips Section -->
+    <section class="section section-alt">
+      <div class="container">
+        <h2 class="section-title">Maximizing Your EV Range</h2>
+        <div class="tips-grid">
+          <div class="tip-item">
+            <h4>🚗 Smooth Acceleration</h4>
+            <p>Gentle acceleration and deceleration help conserve battery. Use regenerative braking to recover energy.</p>
+          </div>
+          
+          <div class="tip-item">
+            <h4>❄️ Pre-Conditioning</h4>
+            <p>Heat or cool the cabin while connected to the charger to preserve battery range during your trip.</p>
+          </div>
+          
+          <div class="tip-item">
+            <h4>🏔️ Plan Your Route</h4>
+            <p>Choose routes with minimal elevation changes when possible. Downhill sections can help regenerate energy.</p>
+          </div>
+          
+          <div class="tip-item">
+            <h4>💨 Reduce Drag</h4>
+            <p>Keep windows closed at highway speeds and remove roof racks when not needed to improve efficiency.</p>
+          </div>
+          
+          <div class="tip-item">
+            <h4>⚙️ Eco Mode</h4>
+            <p>Enable Eco or Economy mode to optimize acceleration, climate control, and other systems for range.</p>
+          </div>
+          
+          <div class="tip-item">
+            <h4>🔌 Charge Smart</h4>
+            <p>Keep battery between 20-80% for daily use. Only charge to 100% for long trips to preserve battery health.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h3>EV Car Rental</h3>
+          <p>Your trusted partner for quality car rentals with the best electric vehicle options.</p>
+        </div>
+        
+        <div class="footer-section">
+          <h4>Quick Links</h4>
+          <ul>
+            <li><a href="cars.html">Our Cars</a></li>
+            <li><a href="booking.html">Book Now</a></li>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-section">
+          <h4>Contact</h4>
+          <ul>
+            <li>📞 1-800-RENT-CAR</li>
+            <li>✉️ info@evcarrental.com</li>
+            <li>📍 123 Rental Street, City</li>
+          </ul>
+        </div>
+        
+        <div class="footer-section">
+          <h4>Hours</h4>
+          <ul>
+            <li>Mon-Fri: 8am - 8pm</li>
+            <li>Sat-Sun: 9am - 6pm</li>
+            <li>24/7 Emergency Support</li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="footer-bottom">
+        <p>&copy; 2024 EV Car Rental. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
