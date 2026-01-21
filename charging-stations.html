@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Find nearby EV charging stations with real-time availability and filter by charger type. Plan your electric vehicle journey with confidence.">
+  <title>Charging Station Locator - EV Car Rental</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="container">
+      <a href="index.html" class="logo">
+        <span class="logo-icon">🚗</span>
+        EV Car Rental
+      </a>
+      
+      <nav class="nav-desktop">
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="cars.html">Our Cars</a></li>
+          <li><a href="booking.html">Book Now</a></li>
+          <li><a href="charging-stations.html" class="active">Charging Stations</a></li>
+          <li><a href="loyalty.html">Rewards</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+      
+      <button class="menu-toggle" aria-label="Toggle menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      
+      <nav class="nav-mobile">
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="cars.html">Our Cars</a></li>
+          <li><a href="booking.html">Book Now</a></li>
+          <li><a href="charging-stations.html" class="active">Charging Stations</a></li>
+          <li><a href="loyalty.html">Rewards</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Page Header -->
+  <section class="page-header">
+    <div class="container">
+      <h1>⚡ EV Charging Station Locator</h1>
+      <p>Find nearby charging stations and plan your electric vehicle journey</p>
+    </div>
+  </section>
+
+  <!-- Breadcrumb -->
+  <nav class="breadcrumb">
+    <div class="container">
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li>Charging Stations</li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <section class="section">
+    <div class="container">
+      <!-- External App Links -->
+      <div class="charging-apps-banner">
+        <div class="apps-banner-content">
+          <p><strong>🌐 For real-time availability:</strong> Access live charging data through these apps</p>
+          <div class="apps-links">
+            <a href="https://www.plugshare.com" target="_blank" rel="noopener noreferrer" class="app-link">
+              <span class="app-icon">🔌</span>
+              <span>PlugShare</span>
+            </a>
+            <a href="https://www.chargehub.com" target="_blank" rel="noopener noreferrer" class="app-link">
+              <span class="app-icon">⚡</span>
+              <span>ChargeHub</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Filters -->
+      <div class="charging-filters">
+        <h2>Filter Charging Stations</h2>
+        <div class="filter-controls">
+          <div class="filter-group">
+            <label class="filter-label">Charger Type:</label>
+            <div class="filter-buttons">
+              <button class="filter-btn active" data-filter="all">
+                All Chargers
+              </button>
+              <button class="filter-btn" data-filter="Level 2">
+                Level 2
+              </button>
+              <button class="filter-btn" data-filter="DC Fast Charging">
+                DC Fast Charging
+              </button>
+            </div>
+          </div>
+          
+          <div class="filter-group">
+            <label class="filter-label">Availability:</label>
+            <div class="filter-buttons">
+              <button class="availability-filter-btn active" data-availability="all">
+                All Stations
+              </button>
+              <button class="availability-filter-btn" data-availability="Available">
+                Available Only
+              </button>
+            </div>
+          </div>
+        </div>
+        
+        <div class="filter-summary">
+          Showing <strong id="station-count">0</strong> charging stations
+        </div>
+      </div>
+
+      <!-- Map and List Container -->
+      <div class="charging-container">
+        <!-- Visual Map -->
+        <div class="charging-map-container">
+          <h2>Map View</h2>
+          <div class="charging-map" id="charging-map">
+            <!-- Map markers will be inserted here dynamically -->
+            <div class="map-legend">
+              <div class="legend-item">
+                <span class="legend-marker available"></span>
+                <span>Available</span>
+              </div>
+              <div class="legend-item">
+                <span class="legend-marker occupied"></span>
+                <span>Occupied</span>
+              </div>
+              <div class="legend-item">
+                <span class="legend-marker maintenance"></span>
+                <span>Maintenance</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Station List -->
+        <div class="station-list-container">
+          <h2>Station Details</h2>
+          <div id="station-list" class="station-list">
+            <!-- Station cards will be inserted here dynamically -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Info Section -->
+  <section class="section section-alt">
+    <div class="container">
+      <div class="section-header">
+        <h2>About EV Charging</h2>
+        <p>Understanding charging types and speeds</p>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">🔌</div>
+          <h3>Level 2 Charging</h3>
+          <p>7-19 kW output. Full charge in 4-8 hours. Perfect for overnight or while at work.</p>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon">⚡</div>
+          <h3>DC Fast Charging</h3>
+          <p>50-350 kW output. 80% charge in 20-40 minutes. Ideal for road trips and quick stops.</p>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon">🗺️</div>
+          <h3>Trip Planning</h3>
+          <p>Plan your routes with charging stops. Most EVs have 200-300+ mile range on a full charge.</p>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon">💳</div>
+          <h3>Payment Options</h3>
+          <p>Most stations accept credit cards, apps, or RFID cards. Some offer free charging.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-section">
+          <h3>EV Car Rental</h3>
+          <p>Your trusted partner for quality car rentals since 2020. We're committed to providing reliable vehicles and exceptional customer service.</p>
+        </div>
+        
+        <div class="footer-section">
+          <h3>Quick Links</h3>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="cars.html">Our Cars</a></li>
+            <li><a href="booking.html">Book Now</a></li>
+            <li><a href="charging-stations.html">Charging Stations</a></li>
+            <li><a href="loyalty.html">Rewards</a></li>
+            <li><a href="about.html">About Us</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-section">
+          <h3>Vehicle Types</h3>
+          <ul>
+            <li><a href="cars.html">Sedans</a></li>
+            <li><a href="cars.html">SUVs</a></li>
+            <li><a href="cars.html">Electric Cars</a></li>
+            <li><a href="cars.html">Luxury Cars</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-section">
+          <h3>Contact Us</h3>
+          <ul>
+            <li>📍 123 Rental Street, City</li>
+            <li>📞 +1 (555) 123-4567</li>
+            <li>✉️ info@evcarrental.com</li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="footer-bottom">
+        <p>&copy; 2026 EV Car Rental. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

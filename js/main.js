@@ -1404,3 +1404,238 @@ function displayChargingOptions(data) {
     `;
   }).join('');
 }
+
+// ============================================
+// Charging Stations
+// ============================================
+let chargingStationsData = [];
+let filteredStations = [];
+
+// Initialize Charging Stations Page
+const chargingMap = document.getElementById('charging-map');
+const stationList = document.getElementById('station-list');
+
+if (chargingMap && stationList) {
+  loadChargingStations();
+}
+
+// Load Charging Stations Data
+async function loadChargingStations() {
+  try {
+    const response = await fetch('data/charging-stations.json');
+    const data = await response.json();
+    chargingStationsData = data.stations;
+    filteredStations = [...chargingStationsData];
+    
+    renderChargingMap();
+    renderStationList();
+    initChargingFilters();
+    updateStationCount();
+  } catch (error) {
+    console.error('Error loading charging stations:', error);
+  }
+}
+
+// Render Charging Map with Markers
+function renderChargingMap() {
+  const map = document.getElementById('charging-map');
+  if (!map) return;
+  
+  // Clear existing markers (keep legend)
+  const existingMarkers = map.querySelectorAll('.station-marker');
+  existingMarkers.forEach(marker => marker.remove());
+  
+  // Map dimensions for positioning
+  const mapWidth = 100; // percentage
+  const mapHeight = 100; // percentage
+  
+  // Render markers for filtered stations
+  filteredStations.forEach((station, index) => {
+    const marker = document.createElement('div');
+    marker.className = `station-marker ${station.availability.toLowerCase()}`;
+    marker.setAttribute('data-station-id', station.id);
+    
+    // Position markers in a grid-like pattern for demo
+    // In a real app, these would be calculated from actual lat/long
+    const col = index % 5;
+    const row = Math.floor(index / 5);
+    const left = 15 + (col * 16); // spread across width
+    const top = 20 + (row * 20); // spread across height
+    
+    marker.style.left = `${left}%`;
+    marker.style.top = `${top}%`;
+    
+    // Add tooltip
+    const tooltip = document.createElement('div');
+    tooltip.className = 'marker-tooltip';
+    tooltip.textContent = station.name;
+    marker.appendChild(tooltip);
+    
+    // Click handler to scroll to station card
+    marker.addEventListener('click', () => {
+      const stationCard = document.querySelector(`[data-station-id="${station.id}"]`);
+      if (stationCard) {
+        stationCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        stationCard.style.transform = 'scale(1.02)';
+        setTimeout(() => {
+          stationCard.style.transform = '';
+        }, 300);
+      }
+    });
+    
+    map.appendChild(marker);
+  });
+}
+
+// Render Station List
+function renderStationList() {
+  const container = document.getElementById('station-list');
+  if (!container) return;
+  
+  if (filteredStations.length === 0) {
+    container.innerHTML = `
+      <div class="no-results">
+        <h3>No charging stations found</h3>
+        <p>Try adjusting your filters to see more results.</p>
+      </div>
+    `;
+    return;
+  }
+  
+  container.innerHTML = filteredStations.map(station => `
+    <div class="station-card ${station.availability.toLowerCase()}" data-station-id="${station.id}">
+      <div class="station-header">
+        <h3 class="station-name">${station.name}</h3>
+        <span class="station-status ${station.availability.toLowerCase()}">
+          ${station.availability}
+        </span>
+      </div>
+      
+      <div class="station-address">
+        <span>📍</span>
+        <span>${station.address}</span>
+      </div>
+      
+      <div class="charger-types">
+        ${station.chargerTypes.map(type => `
+          <span class="charger-badge">${type}</span>
+        `).join('')}
+      </div>
+      
+      <div class="station-details">
+        <div class="station-detail">
+          <span class="detail-label">Ports</span>
+          <span class="detail-value">${station.numberOfPorts} ports</span>
+        </div>
+        <div class="station-detail">
+          <span class="detail-label">Power</span>
+          <span class="detail-value">${station.powerOutput}</span>
+        </div>
+        <div class="station-detail">
+          <span class="detail-label">Hours</span>
+          <span class="detail-value">${station.operatingHours}</span>
+        </div>
+        <div class="station-detail">
+          <span class="detail-label">Cost</span>
+          <span class="detail-value">${station.cost}</span>
+        </div>
+        <div class="station-detail">
+          <span class="detail-label">Network</span>
+          <span class="detail-value">${station.network}</span>
+        </div>
+        <div class="station-detail">
+          <span class="detail-label">Connectors</span>
+          <span class="detail-value">${station.connectors.join(', ')}</span>
+        </div>
+      </div>
+      
+      ${station.amenities && station.amenities.length > 0 ? `
+        <div class="station-amenities">
+          <div class="amenities-label">Amenities</div>
+          <div class="amenities-list">
+            ${station.amenities.map(amenity => `
+              <span class="amenity-tag">${amenity}</span>
+            `).join('')}
+          </div>
+        </div>
+      ` : ''}
+      
+      <div class="station-links">
+        <a href="${station.plugshareLink}" target="_blank" rel="noopener noreferrer" class="station-link">
+          <span>🔌</span>
+          <span>PlugShare</span>
+        </a>
+        <a href="${station.chargehubLink}" target="_blank" rel="noopener noreferrer" class="station-link">
+          <span>⚡</span>
+          <span>ChargeHub</span>
+        </a>
+      </div>
+    </div>
+  `).join('');
+}
+
+// Initialize Charging Filters
+function initChargingFilters() {
+  // Charger Type Filters
+  const filterButtons = document.querySelectorAll('.filter-btn');
+  filterButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      // Update active state
+      filterButtons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      
+      // Apply filter
+      const filterValue = btn.getAttribute('data-filter');
+      applyChargingFilters();
+    });
+  });
+  
+  // Availability Filters
+  const availabilityButtons = document.querySelectorAll('.availability-filter-btn');
+  availabilityButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      // Update active state
+      availabilityButtons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      
+      // Apply filter
+      applyChargingFilters();
+    });
+  });
+}
+
+// Apply Charging Filters
+function applyChargingFilters() {
+  // Get active filters
+  const activeChargerTypeBtn = document.querySelector('.filter-btn.active');
+  const activeAvailabilityBtn = document.querySelector('.availability-filter-btn.active');
+  
+  const chargerTypeFilter = activeChargerTypeBtn ? activeChargerTypeBtn.getAttribute('data-filter') : 'all';
+  const availabilityFilter = activeAvailabilityBtn ? activeAvailabilityBtn.getAttribute('data-availability') : 'all';
+  
+  // Filter stations
+  filteredStations = chargingStationsData.filter(station => {
+    // Charger type filter
+    const matchesChargerType = chargerTypeFilter === 'all' || 
+      station.chargerTypes.includes(chargerTypeFilter);
+    
+    // Availability filter
+    const matchesAvailability = availabilityFilter === 'all' || 
+      station.availability === availabilityFilter;
+    
+    return matchesChargerType && matchesAvailability;
+  });
+  
+  // Re-render
+  renderChargingMap();
+  renderStationList();
+  updateStationCount();
+}
+
+// Update Station Count
+function updateStationCount() {
+  const countElement = document.getElementById('station-count');
+  if (countElement) {
+    countElement.textContent = filteredStations.length;
+  }
+}
