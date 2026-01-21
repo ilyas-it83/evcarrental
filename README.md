@@ -116,15 +116,30 @@ Edit `data/cars.json` and add a new object:
 
 - [Product Requirements Document](docs/PRD.md)
 - [Project Constitution](.specify/memory/constitution.md)
+- [GitHub Copilot Agents](.github/README.md) - Agent configuration and workflow
+- [Issue Assignments](.github/issue-assignments.md) - GitHub issues mapped to agents
+- [Agent Workflow Guide](.github/AGENT_WORKFLOW.md) - Step-by-step implementation process
+- [Implementation Tracker](.github/IMPLEMENTATION_TRACKER.md) - Progress tracking
 
-## 🔮 Future Enhancements
+## 🔮 Future Enhancements (10 Open Issues)
 
-- Backend API integration
-- User authentication
-- Real-time availability
-- Payment processing
-- Google Maps integration
-- Customer reviews
+See [Issue Assignments](.github/issue-assignments.md) for detailed implementation plans.
+
+**High Priority:**
+- Charging Station Locator Map ([#1](https://github.com/ilyas-it83/evcarrental/issues/1))
+- Range Calculator & Trip Planner ([#2](https://github.com/ilyas-it83/evcarrental/issues/2))
+
+**Medium Priority:**
+- EV Driving Guide & Tips Page ([#3](https://github.com/ilyas-it83/evcarrental/issues/3))
+- Charging Cost Estimator ([#4](https://github.com/ilyas-it83/evcarrental/issues/4))
+- Carbon Footprint Tracker ([#5](https://github.com/ilyas-it83/evcarrental/issues/5))
+- Vehicle Comparison Tool ([#6](https://github.com/ilyas-it83/evcarrental/issues/6))
+- Rental Add-ons & Accessories ([#7](https://github.com/ilyas-it83/evcarrental/issues/7))
+
+**Low Priority:**
+- Customer Reviews & Ratings ([#8](https://github.com/ilyas-it83/evcarrental/issues/8))
+- Loyalty & Rewards Program Page ([#9](https://github.com/ilyas-it83/evcarrental/issues/9))
+- Live Chat Support Widget ([#10](https://github.com/ilyas-it83/evcarrental/issues/10))
 
 ---
 
