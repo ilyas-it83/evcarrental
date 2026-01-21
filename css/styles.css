@@ -442,6 +442,34 @@ input, textarea, select {
   font-size: var(--font-size-sm);
 }
 
+.tier-card {
+  text-align: left;
+}
+
+.tier-card .feature-icon {
+  margin: 0 0 var(--space-4);
+}
+
+.tier-benefits {
+  margin-top: var(--space-4);
+  display: grid;
+  gap: var(--space-2);
+  color: var(--color-gray);
+  font-size: var(--font-size-sm);
+}
+
+.tier-benefits li {
+  display: flex;
+  gap: var(--space-2);
+  align-items: flex-start;
+}
+
+.tier-benefits li::before {
+  content: '✓';
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
 /* ============================================
    Car Cards Grid
    ============================================ */
