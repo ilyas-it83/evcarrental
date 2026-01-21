@@ -1411,6 +1411,14 @@ function displayChargingOptions(data) {
 let chargingStationsData = [];
 let filteredStations = [];
 
+// Constants for map positioning
+const MAP_GRID_COLUMNS = 5;
+const MAP_MARKER_OFFSET_LEFT = 15;
+const MAP_MARKER_SPACING_H = 16;
+const MAP_MARKER_SPACING_V = 20;
+const CARD_HIGHLIGHT_SCALE = 1.02;
+const CARD_HIGHLIGHT_DURATION = 300;
+
 // Initialize Charging Stations Page
 const chargingMap = document.getElementById('charging-map');
 const stationList = document.getElementById('station-list');
@@ -1457,10 +1465,10 @@ function renderChargingMap() {
     
     // Position markers in a grid-like pattern for demo
     // In a real app, these would be calculated from actual lat/long
-    const col = index % 5;
-    const row = Math.floor(index / 5);
-    const left = 15 + (col * 16); // spread across width
-    const top = 20 + (row * 20); // spread across height
+    const col = index % MAP_GRID_COLUMNS;
+    const row = Math.floor(index / MAP_GRID_COLUMNS);
+    const left = MAP_MARKER_OFFSET_LEFT + (col * MAP_MARKER_SPACING_H);
+    const top = 20 + (row * MAP_MARKER_SPACING_V);
     
     marker.style.left = `${left}%`;
     marker.style.top = `${top}%`;
@@ -1476,10 +1484,10 @@ function renderChargingMap() {
       const stationCard = document.querySelector(`[data-station-id="${station.id}"]`);
       if (stationCard) {
         stationCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        stationCard.style.transform = 'scale(1.02)';
+        stationCard.style.transform = `scale(${CARD_HIGHLIGHT_SCALE})`;
         setTimeout(() => {
           stationCard.style.transform = '';
-        }, 300);
+        }, CARD_HIGHLIGHT_DURATION);
       }
     });
     
@@ -1585,7 +1593,6 @@ function initChargingFilters() {
       btn.classList.add('active');
       
       // Apply filter
-      const filterValue = btn.getAttribute('data-filter');
       applyChargingFilters();
     });
   });
