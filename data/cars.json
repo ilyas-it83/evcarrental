@@ -392,6 +392,376 @@
           "helpful_count": 13
         }
       ]
+    },
+    {
+      "id": "car-009",
+      "name": "Hyundai Kona Electric",
+      "type": "SUV",
+      "year": 2024,
+      "seats": 5,
+      "transmission": "Automatic",
+      "fuelType": "Electric",
+      "pricePerDay": 80,
+      "pricePerWeek": 480,
+      "deposit": 250,
+      "range": 305,
+      "batteryCapacity": 64,
+      "efficiency": 15.8,
+      "features": ["Smart Cruise Control", "Wireless Charging", "Heads-Up Display", "Heated Steering", "Lane Keep Assist"],
+      "images": ["kona-1.jpg", "kona-2.jpg"],
+      "available": true,
+      "featured": false,
+      "description": "Compact electric SUV with impressive range and modern tech features.",
+      "reviews": [
+        {
+          "rating": 5,
+          "author": "Michelle Adams",
+          "date": "2025-12-14",
+          "comment": "Perfect size for city and highway driving. Great range and the wireless charging pad was super convenient!",
+          "helpful_count": 10
+        },
+        {
+          "rating": 4,
+          "author": "Steven Wright",
+          "date": "2025-11-26",
+          "comment": "Solid electric SUV with good features. Heads-up display is really helpful. Good value for the price.",
+          "helpful_count": 7
+        }
+      ]
+    },
+    {
+      "id": "car-010",
+      "name": "Mazda CX-5",
+      "type": "SUV",
+      "year": 2024,
+      "seats": 5,
+      "transmission": "Automatic",
+      "fuelType": "Petrol",
+      "pricePerDay": 72,
+      "pricePerWeek": 440,
+      "deposit": 230,
+      "features": ["AC", "Apple CarPlay", "Blind Spot Monitor", "Power Liftgate", "Bose Audio"],
+      "images": ["cx5-1.jpg", "cx5-2.jpg"],
+      "available": true,
+      "featured": false,
+      "description": "Stylish and fun-to-drive SUV with premium interior quality.",
+      "reviews": [
+        {
+          "rating": 5,
+          "author": "Gregory Phillips",
+          "date": "2025-12-11",
+          "comment": "Love the driving dynamics! Feels more like a sports car than an SUV. Interior quality is impressive for the price.",
+          "helpful_count": 13
+        },
+        {
+          "rating": 4,
+          "author": "Caroline Rogers",
+          "date": "2025-11-17",
+          "comment": "Great SUV with nice features. Bose sound system is excellent. Blind spot monitor is very useful.",
+          "helpful_count": 8
+        }
+      ]
+    },
+    {
+      "id": "car-011",
+      "name": "Audi A4",
+      "type": "Luxury",
+      "year": 2024,
+      "seats": 5,
+      "transmission": "Automatic",
+      "fuelType": "Petrol",
+      "pricePerDay": 115,
+      "pricePerWeek": 690,
+      "deposit": 380,
+      "features": ["Quattro AWD", "Virtual Cockpit", "Bang & Olufsen Audio", "Matrix LED Headlights", "Memory Seats"],
+      "images": ["a4-1.jpg", "a4-2.jpg"],
+      "available": true,
+      "featured": true,
+      "description": "German engineering at its finest. The Audi A4 delivers refined luxury and performance.",
+      "reviews": [
+        {
+          "rating": 5,
+          "author": "William Cooper",
+          "date": "2025-12-19",
+          "comment": "Exceptional build quality and tech. The virtual cockpit is stunning and the Quattro system handles beautifully!",
+          "helpful_count": 18
+        },
+        {
+          "rating": 5,
+          "author": "Isabella Turner",
+          "date": "2025-12-03",
+          "comment": "Premium feel throughout. Matrix headlights are incredible at night. Bang & Olufsen audio is pure bliss!",
+          "helpful_count": 14
+        },
+        {
+          "rating": 4,
+          "author": "Nathan King",
+          "date": "2025-11-15",
+          "comment": "Great luxury sedan with excellent handling. Very comfortable for long drives. Minor learning curve with all the tech.",
+          "helpful_count": 9
+        }
+      ]
+    },
+    {
+      "id": "car-012",
+      "name": "Kia Sportage Hybrid",
+      "type": "SUV",
+      "year": 2024,
+      "seats": 5,
+      "transmission": "Automatic",
+      "fuelType": "Hybrid",
+      "pricePerDay": 78,
+      "pricePerWeek": 470,
+      "deposit": 240,
+      "batteryCapacity": 1.5,
+      "efficiency": 5.2,
+      "features": ["Panoramic Sunroof", "Wireless Apple CarPlay", "Highway Driving Assist", "Remote Start", "Harman Kardon Audio"],
+      "images": ["sportage-1.jpg", "sportage-2.jpg"],
+      "available": true,
+      "featured": false,
+      "description": "Modern hybrid SUV with bold design and excellent fuel efficiency.",
+      "reviews": [
+        {
+          "rating": 5,
+          "author": "Laura Bennett",
+          "date": "2025-12-09",
+          "comment": "Impressed by the fuel economy and features! The panoramic sunroof is gorgeous. Very comfortable ride.",
+          "helpful_count": 12
+        },
+        {
+          "rating": 4,
+          "author": "Marcus Johnson",
+          "date": "2025-11-23",
+          "comment": "Great hybrid SUV with modern styling. Highway driving assist works well. Good value for money.",
+          "helpful_count": 8
+        }
+      ]
+    },
+    {
+      "id": "car-013",
+      "name": "Volvo XC60",
+      "type": "SUV",
+      "year": 2024,
+      "seats": 5,
+      "transmission": "Automatic",
+      "fuelType": "Hybrid",
+      "pricePerDay": 135,
+      "pricePerWeek": 810,
+      "deposit": 420,
+      "batteryCapacity": 11.6,
+      "efficiency": 6.8,
+      "features": ["Pilot Assist", "Bowers & Wilkins Audio", "Nappa Leather", "Air Quality System", "Crystal Gearshift"],
+      "images": ["xc60-1.jpg", "xc60-2.jpg"],
+      "available": true,
+      "featured": true,
+      "description": "Scandinavian luxury SUV combining safety, comfort, and sustainability.",
+      "reviews": [
+        {
+          "rating": 5,
+          "author": "Catherine Moore",
+          "date": "2025-12-21",
+          "comment": "The most comfortable SUV I've driven! Safety features are outstanding. The air quality system is a game-changer.",
+          "helpful_count": 21
+        },
+        {
+          "rating": 5,
+          "author": "Benjamin Scott",
+          "date": "2025-12-06",
+          "comment": "Volvo nailed it! Pilot Assist makes highway driving effortless. Bowers & Wilkins audio is concert-quality.",
+          "helpful_count": 16
+        },
+        {
+          "rating": 4,
+          "author": "Diana Martinez",
+          "date": "2025-11-13",
+          "comment": "Luxurious and practical. Love the minimalist Scandinavian design. Hybrid system is efficient.",
+          "helpful_count": 10
+        }
+      ]
+    },
+    {
+      "id": "car-014",
+      "name": "Chevrolet Bolt EUV",
+      "type": "Electric",
+      "year": 2024,
+      "seats": 5,
+      "transmission": "Automatic",
+      "fuelType": "Electric",
+      "pricePerDay": 68,
+      "pricePerWeek": 410,
+      "deposit": 200,
+      "range": 247,
+      "batteryCapacity": 65,
+      "efficiency": 16.9,
+      "features": ["Super Cruise", "HD Surround Vision", "One-Pedal Driving", "WiFi Hotspot", "Teen Driver Mode"],
+      "images": ["bolt-1.jpg", "bolt-2.jpg"],
+      "available": true,
+      "featured": false,
+      "description": "Affordable electric crossover with hands-free driving capability.",
+      "reviews": [
+        {
+          "rating": 5,
+          "author": "Rebecca Hayes",
+          "date": "2025-12-13",
+          "comment": "Super Cruise is amazing! Made our road trip so relaxing. Great value for an electric vehicle.",
+          "helpful_count": 11
+        },
+        {
+          "rating": 4,
+          "author": "Timothy Anderson",
+          "date": "2025-11-28",
+          "comment": "Good electric car with decent range. One-pedal driving takes some getting used to but it's efficient.",
+          "helpful_count": 7
+        }
+      ]
+    },
+    {
+      "id": "car-015",
+      "name": "Subaru Outback",
+      "type": "SUV",
+      "year": 2024,
+      "seats": 5,
+      "transmission": "Automatic",
+      "fuelType": "Petrol",
+      "pricePerDay": 77,
+      "pricePerWeek": 465,
+      "deposit": 240,
+      "features": ["Symmetrical AWD", "EyeSight Safety", "X-Mode", "Roof Rails", "Large Touchscreen"],
+      "images": ["outback-1.jpg", "outback-2.jpg"],
+      "available": true,
+      "featured": false,
+      "description": "Adventure-ready wagon with legendary reliability and all-weather capability.",
+      "reviews": [
+        {
+          "rating": 5,
+          "author": "Gerald Thompson",
+          "date": "2025-12-17",
+          "comment": "Perfect for our camping trip! The AWD handled rough terrain easily. Tons of cargo space and very comfortable.",
+          "helpful_count": 15
+        },
+        {
+          "rating": 5,
+          "author": "Paula Wilson",
+          "date": "2025-12-01",
+          "comment": "Love the Outback! EyeSight safety features are impressive. Great ground clearance and visibility.",
+          "helpful_count": 12
+        },
+        {
+          "rating": 4,
+          "author": "Carl Rodriguez",
+          "date": "2025-11-16",
+          "comment": "Reliable and practical. X-Mode was helpful in snowy conditions. Good fuel economy for an AWD vehicle.",
+          "helpful_count": 8
+        }
+      ]
+    },
+    {
+      "id": "car-016",
+      "name": "Peugeot 208",
+      "type": "Hatchback",
+      "year": 2024,
+      "seats": 5,
+      "transmission": "Manual",
+      "fuelType": "Petrol",
+      "pricePerDay": 48,
+      "pricePerWeek": 290,
+      "deposit": 140,
+      "features": ["3D i-Cockpit", "Touch Screen", "Parking Sensors", "LED Lights", "USB Ports"],
+      "images": ["208-1.jpg", "208-2.jpg"],
+      "available": true,
+      "featured": false,
+      "description": "Stylish French hatchback with distinctive design and nimble handling.",
+      "reviews": [
+        {
+          "rating": 4,
+          "author": "Sophie Laurent",
+          "date": "2025-12-10",
+          "comment": "Cute and fun to drive! The 3D cockpit is unique. Great for city parking and very fuel efficient.",
+          "helpful_count": 9
+        },
+        {
+          "rating": 5,
+          "author": "Pierre Dubois",
+          "date": "2025-11-21",
+          "comment": "Love the French style! Handles corners beautifully. Perfect size for European cities.",
+          "helpful_count": 11
+        }
+      ]
+    },
+    {
+      "id": "car-017",
+      "name": "Lexus ES 300h",
+      "type": "Luxury",
+      "year": 2024,
+      "seats": 5,
+      "transmission": "Automatic",
+      "fuelType": "Hybrid",
+      "pricePerDay": 125,
+      "pricePerWeek": 750,
+      "deposit": 400,
+      "batteryCapacity": 1.6,
+      "efficiency": 4.8,
+      "features": ["Mark Levinson Audio", "Semi-Aniline Leather", "Climate Concierge", "Shiatsu Massage Seats", "Ambient Lighting"],
+      "images": ["es300h-1.jpg", "es300h-2.jpg"],
+      "available": true,
+      "featured": true,
+      "description": "Japanese luxury sedan renowned for reliability and whisper-quiet comfort.",
+      "reviews": [
+        {
+          "rating": 5,
+          "author": "Margaret Collins",
+          "date": "2025-12-20",
+          "comment": "The quietest car I've ever been in! Massage seats are heavenly. Mark Levinson audio is exceptional.",
+          "helpful_count": 19
+        },
+        {
+          "rating": 5,
+          "author": "Richard Patterson",
+          "date": "2025-12-04",
+          "comment": "Pure comfort and refinement. Climate concierge keeps everyone comfortable. Excellent hybrid efficiency too!",
+          "helpful_count": 14
+        },
+        {
+          "rating": 4,
+          "author": "Janet Brooks",
+          "date": "2025-11-19",
+          "comment": "Beautiful car with amazing build quality. Very smooth and comfortable. Great for long trips.",
+          "helpful_count": 10
+        }
+      ]
+    },
+    {
+      "id": "car-018",
+      "name": "Renault Kangoo Van",
+      "type": "Van",
+      "year": 2024,
+      "seats": 5,
+      "transmission": "Manual",
+      "fuelType": "Diesel",
+      "pricePerDay": 62,
+      "pricePerWeek": 370,
+      "deposit": 190,
+      "features": ["AC", "Bluetooth", "Rear Parking Sensors", "Sliding Side Door", "Modular Storage"],
+      "images": ["kangoo-1.jpg", "kangoo-2.jpg"],
+      "available": true,
+      "featured": false,
+      "description": "Compact and practical van ideal for small business deliveries and family trips.",
+      "reviews": [
+        {
+          "rating": 4,
+          "author": "Frank Morrison",
+          "date": "2025-12-15",
+          "comment": "Perfect for deliveries! Easy to maneuver in tight spaces. Good fuel economy for a van.",
+          "helpful_count": 8
+        },
+        {
+          "rating": 5,
+          "author": "Helen Carter",
+          "date": "2025-11-29",
+          "comment": "Great little van! Used it for a home improvement project. Modular storage is very clever.",
+          "helpful_count": 10
+        }
+      ]
     }
   ],
   "vehicleTypes": ["Sedan", "SUV", "Hatchback", "Luxury", "Electric", "Van"],
