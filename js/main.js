@@ -17,6 +17,7 @@ document.addEventListener('DOMContentLoaded', function() {
   initMobileMenu();
   initForms();
   initComparison();
+  initCursorTrail();
   
   // Load cars data for pages that need it
   const carsGrid = document.getElementById('cars-grid');
@@ -1403,4 +1404,156 @@ function displayChargingOptions(data) {
       </tr>
     `;
   }).join('');
+}
+
+// ============================================
+// Cursor Trail Effect
+// ============================================
+function initCursorTrail() {
+  const canvas = document.createElement('canvas');
+  canvas.id = 'cursor-trail-canvas';
+  canvas.style.cssText = `
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 9999;
+  `;
+  document.body.appendChild(canvas);
+  
+  const ctx = canvas.getContext('2d');
+  let particles = [];
+  let mouseX = 0;
+  let mouseY = 0;
+  let isMoving = false;
+  let moveTimeout;
+  
+  // Resize canvas to window size
+  function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resizeCanvas();
+  window.addEventListener('resize', resizeCanvas);
+  
+  // Pink theme colors for particles
+  const colors = [
+    '#E91E63',  // Primary pink
+    '#F06292',  // Light pink
+    '#C2185B',  // Dark pink
+    '#9C27B0',  // Purple
+    '#FF4081',  // Accent pink
+    '#EC407A'   // Medium pink
+  ];
+  
+  // Particle class
+  class Particle {
+    constructor(x, y) {
+      this.x = x;
+      this.y = y;
+      this.size = Math.random() * 8 + 4;
+      this.speedX = (Math.random() - 0.5) * 3;
+      this.speedY = (Math.random() - 0.5) * 3;
+      this.color = colors[Math.floor(Math.random() * colors.length)];
+      this.alpha = 1;
+      this.decay = Math.random() * 0.02 + 0.02;
+      this.rotation = Math.random() * 360;
+      this.rotationSpeed = (Math.random() - 0.5) * 10;
+      this.shape = Math.random() > 0.5 ? 'circle' : 'star';
+    }
+    
+    update() {
+      this.x += this.speedX;
+      this.y += this.speedY;
+      this.alpha -= this.decay;
+      this.size *= 0.97;
+      this.rotation += this.rotationSpeed;
+      this.speedY += 0.05; // Slight gravity effect
+    }
+    
+    draw() {
+      ctx.save();
+      ctx.globalAlpha = this.alpha;
+      ctx.translate(this.x, this.y);
+      ctx.rotate(this.rotation * Math.PI / 180);
+      ctx.fillStyle = this.color;
+      
+      if (this.shape === 'circle') {
+        ctx.beginPath();
+        ctx.arc(0, 0, this.size, 0, Math.PI * 2);
+        ctx.fill();
+      } else {
+        // Draw a star
+        this.drawStar(0, 0, 5, this.size, this.size / 2);
+      }
+      
+      ctx.restore();
+    }
+    
+    drawStar(cx, cy, spikes, outerRadius, innerRadius) {
+      let rot = Math.PI / 2 * 3;
+      let x = cx;
+      let y = cy;
+      const step = Math.PI / spikes;
+      
+      ctx.beginPath();
+      ctx.moveTo(cx, cy - outerRadius);
+      
+      for (let i = 0; i < spikes; i++) {
+        x = cx + Math.cos(rot) * outerRadius;
+        y = cy + Math.sin(rot) * outerRadius;
+        ctx.lineTo(x, y);
+        rot += step;
+        
+        x = cx + Math.cos(rot) * innerRadius;
+        y = cy + Math.sin(rot) * innerRadius;
+        ctx.lineTo(x, y);
+        rot += step;
+      }
+      
+      ctx.lineTo(cx, cy - outerRadius);
+      ctx.closePath();
+      ctx.fill();
+    }
+  }
+  
+  // Track mouse movement
+  document.addEventListener('mousemove', function(e) {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+    isMoving = true;
+    
+    // Create particles on mouse move
+    for (let i = 0; i < 3; i++) {
+      particles.push(new Particle(mouseX, mouseY));
+    }
+    
+    // Keep particle count reasonable
+    if (particles.length > 100) {
+      particles = particles.slice(-100);
+    }
+    
+    clearTimeout(moveTimeout);
+    moveTimeout = setTimeout(() => {
+      isMoving = false;
+    }, 100);
+  });
+  
+  // Animation loop
+  function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    // Update and draw particles
+    particles = particles.filter(particle => {
+      particle.update();
+      particle.draw();
+      return particle.alpha > 0 && particle.size > 0.5;
+    });
+    
+    requestAnimationFrame(animate);
+  }
+  
+  animate();
 }
