@@ -7,7 +7,7 @@
    CSS Variables (Design Tokens)
    ============================================ */
 :root {
-  /* Colors - Pink Theme */
+  /* Colors - Pink Theme (Light Mode) */
   --color-primary: #E91E63;
   --color-primary-dark: #C2185B;
   --color-primary-light: #F06292;
@@ -19,6 +19,15 @@
   --color-white: #FFFFFF;
   --color-error: #D32F2F;
   --color-success: #388E3C;
+  
+  /* Background and surface colors for theming */
+  --color-bg: #FFFFFF;
+  --color-bg-secondary: #FFF0F5;
+  --color-surface: #FFFFFF;
+  --color-surface-hover: #FFF0F5;
+  --color-text: #212121;
+  --color-text-secondary: #757575;
+  --color-border: #E0E0E0;
   
   /* Typography */
   --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
@@ -63,6 +72,60 @@
 }
 
 /* ============================================
+   Dark Mode Theme
+   ============================================ */
+[data-theme="dark"] {
+  --color-primary: #F06292;
+  --color-primary-dark: #E91E63;
+  --color-primary-light: #F8BBD9;
+  --color-secondary: #CE93D8;
+  --color-secondary-dark: #9C27B0;
+  --color-dark: #FFFFFF;
+  --color-gray: #BDBDBD;
+  --color-light: #2D2D2D;
+  --color-white: #1A1A1A;
+  
+  --color-bg: #121212;
+  --color-bg-secondary: #1E1E1E;
+  --color-surface: #1E1E1E;
+  --color-surface-hover: #2D2D2D;
+  --color-text: #E0E0E0;
+  --color-text-secondary: #BDBDBD;
+  --color-border: #424242;
+  
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.5);
+}
+
+/* System preference detection */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --color-primary: #F06292;
+    --color-primary-dark: #E91E63;
+    --color-primary-light: #F8BBD9;
+    --color-secondary: #CE93D8;
+    --color-secondary-dark: #9C27B0;
+    --color-dark: #FFFFFF;
+    --color-gray: #BDBDBD;
+    --color-light: #2D2D2D;
+    --color-white: #1A1A1A;
+    
+    --color-bg: #121212;
+    --color-bg-secondary: #1E1E1E;
+    --color-surface: #1E1E1E;
+    --color-surface-hover: #2D2D2D;
+    --color-text: #E0E0E0;
+    --color-text-secondary: #BDBDBD;
+    --color-border: #424242;
+    
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.5);
+  }
+}
+
+/* ============================================
    Reset & Base Styles
    ============================================ */
 *, *::before, *::after {
@@ -79,8 +142,9 @@ body {
   font-family: var(--font-family);
   font-size: var(--font-size-base);
   line-height: 1.6;
-  color: var(--color-dark);
-  background-color: var(--color-white);
+  color: var(--color-text);
+  background-color: var(--color-bg);
+  transition: background-color var(--transition-base), color var(--transition-base);
 }
 
 img {
@@ -196,11 +260,12 @@ input, textarea, select {
    Header & Navigation
    ============================================ */
 .header {
-  background-color: var(--color-white);
+  background-color: var(--color-surface);
   box-shadow: var(--shadow-sm);
   position: sticky;
   top: 0;
   z-index: 100;
+  transition: background-color var(--transition-base);
 }
 
 .header .container {
@@ -290,9 +355,10 @@ input, textarea, select {
   top: 100%;
   left: 0;
   right: 0;
-  background-color: var(--color-white);
+  background-color: var(--color-surface);
   box-shadow: var(--shadow-md);
   padding: var(--space-4);
+  transition: background-color var(--transition-base);
 }
 
 .nav-mobile.active {
@@ -317,6 +383,72 @@ input, textarea, select {
 .nav-mobile a.active {
   background-color: var(--color-light);
   color: var(--color-primary);
+}
+
+/* Theme Toggle Button */
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background-color: var(--color-surface);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  margin-left: var(--space-4);
+  flex-shrink: 0;
+}
+
+.theme-toggle:hover {
+  background-color: var(--color-surface-hover);
+  border-color: var(--color-primary);
+  transform: scale(1.05);
+}
+
+.theme-toggle .icon {
+  font-size: var(--font-size-lg);
+  transition: transform var(--transition-base);
+}
+
+.theme-toggle:hover .icon {
+  transform: rotate(15deg);
+}
+
+/* Sun icon (shown in dark mode) */
+.theme-toggle .icon-sun {
+  display: none;
+}
+
+/* Moon icon (shown in light mode) */
+.theme-toggle .icon-moon {
+  display: block;
+}
+
+[data-theme="dark"] .theme-toggle .icon-sun {
+  display: block;
+}
+
+[data-theme="dark"] .theme-toggle .icon-moon {
+  display: none;
+}
+
+/* System preference dark mode icon display */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .theme-toggle .icon-sun {
+    display: block;
+  }
+  :root:not([data-theme="light"]) .theme-toggle .icon-moon {
+    display: none;
+  }
+}
+
+/* Header actions container */
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
 }
 
 /* ============================================
@@ -388,13 +520,14 @@ input, textarea, select {
 }
 
 .section-header p {
-  color: var(--color-gray);
+  color: var(--color-text-secondary);
   max-width: 600px;
   margin: 0 auto;
 }
 
 .section-alt {
-  background-color: var(--color-light);
+  background-color: var(--color-bg-secondary);
+  transition: background-color var(--transition-base);
 }
 
 /* ============================================
@@ -407,12 +540,13 @@ input, textarea, select {
 }
 
 .feature-card {
-  background-color: var(--color-white);
+  background-color: var(--color-surface);
   padding: var(--space-6);
   border-radius: var(--radius-lg);
   text-align: center;
   box-shadow: var(--shadow-sm);
-  transition: box-shadow var(--transition-base);
+  transition: box-shadow var(--transition-base), background-color var(--transition-base);
+  border: 1px solid var(--color-border);
 }
 
 .feature-card:hover {
@@ -438,7 +572,7 @@ input, textarea, select {
 }
 
 .feature-card p {
-  color: var(--color-gray);
+  color: var(--color-text-secondary);
   font-size: var(--font-size-sm);
 }
 
@@ -480,11 +614,12 @@ input, textarea, select {
 }
 
 .car-card {
-  background-color: var(--color-white);
+  background-color: var(--color-surface);
   border-radius: var(--radius-lg);
   overflow: hidden;
   box-shadow: var(--shadow-sm);
   transition: all var(--transition-base);
+  border: 1px solid var(--color-border);
 }
 
 .car-card:hover {
@@ -698,9 +833,11 @@ input, textarea, select {
 .form-group textarea {
   width: 100%;
   padding: var(--space-3) var(--space-4);
-  border: 1px solid #ddd;
+  border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
-  transition: border-color var(--transition-fast);
+  transition: border-color var(--transition-fast), background-color var(--transition-base);
+  background-color: var(--color-surface);
+  color: var(--color-text);
 }
 
 .form-group input:focus,

@@ -14,6 +14,7 @@ let comparisonList = [];
 // DOM Ready
 // ============================================
 document.addEventListener('DOMContentLoaded', function() {
+  initTheme();
   initMobileMenu();
   initForms();
   initComparison();
@@ -63,6 +64,57 @@ function initMobileMenu() {
       });
     });
   }
+}
+
+// ============================================
+// Theme Toggle (Dark Mode)
+// ============================================
+function initTheme() {
+  const themeToggle = document.getElementById('theme-toggle');
+  
+  // Get saved theme or detect system preference
+  const savedTheme = localStorage.getItem('theme');
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  
+  // Apply initial theme
+  if (savedTheme) {
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  } else if (prefersDark) {
+    // Let CSS handle system preference (no data-theme attribute)
+  }
+  
+  // Theme toggle button click handler
+  if (themeToggle) {
+    themeToggle.addEventListener('click', toggleTheme);
+  }
+  
+  // Listen for system preference changes
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+    // Only apply if user hasn't set a preference
+    if (!localStorage.getItem('theme')) {
+      // CSS will handle this automatically
+      document.documentElement.removeAttribute('data-theme');
+    }
+  });
+}
+
+function toggleTheme() {
+  const currentTheme = document.documentElement.getAttribute('data-theme');
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  
+  let newTheme;
+  
+  if (currentTheme === 'dark') {
+    newTheme = 'light';
+  } else if (currentTheme === 'light') {
+    newTheme = 'dark';
+  } else {
+    // No explicit theme set, toggle based on system preference
+    newTheme = prefersDark ? 'light' : 'dark';
+  }
+  
+  document.documentElement.setAttribute('data-theme', newTheme);
+  localStorage.setItem('theme', newTheme);
 }
 
 // ============================================
@@ -124,6 +176,7 @@ function renderCarsGrid() {
 function createCarCard(car) {
   const avgRating = calculateAverageRating(car.reviews || []);
   const reviewCount = car.reviews ? car.reviews.length : 0;
+  const isInComparison = comparisonList.includes(car.id);
   
   return `
     <article class="car-card">
