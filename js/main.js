@@ -2024,16 +2024,23 @@ function renderCalendar() {
   
   calendarContainer.innerHTML = html;
   
-  // Add event listeners
-  document.getElementById('prev-month-btn').addEventListener('click', () => {
-    currentCalendarMonth.setMonth(currentCalendarMonth.getMonth() - 1);
-    renderCalendar();
-  });
+  // Add event listeners using event delegation
+  const prevBtn = calendarContainer.querySelector('#prev-month-btn');
+  const nextBtn = calendarContainer.querySelector('#next-month-btn');
   
-  document.getElementById('next-month-btn').addEventListener('click', () => {
-    currentCalendarMonth.setMonth(currentCalendarMonth.getMonth() + 1);
-    renderCalendar();
-  });
+  if (prevBtn) {
+    prevBtn.addEventListener('click', () => {
+      currentCalendarMonth.setMonth(currentCalendarMonth.getMonth() - 1);
+      renderCalendar();
+    });
+  }
+  
+  if (nextBtn) {
+    nextBtn.addEventListener('click', () => {
+      currentCalendarMonth.setMonth(currentCalendarMonth.getMonth() + 1);
+      renderCalendar();
+    });
+  }
   
   // Add click listeners to calendar days
   calendarContainer.querySelectorAll('.calendar-day:not(.empty):not([data-disabled])').forEach(dayEl => {
@@ -2071,8 +2078,25 @@ function handleDateSelection(dateString) {
       if (!hasUnavailableDateInRange(selectedPickupDate, selectedDate)) {
         selectedReturnDate = selectedDate;
       } else {
-        // Show error message
-        alert('Cannot select this range. There are unavailable dates between your pickup and return dates.');
+        // Show error message inline
+        const calendarSection = document.querySelector('.availability-calendar-section');
+        if (calendarSection) {
+          const existingError = calendarSection.querySelector('.calendar-error-message');
+          if (existingError) {
+            existingError.remove();
+          }
+          
+          const errorDiv = document.createElement('div');
+          errorDiv.className = 'calendar-error-message';
+          errorDiv.textContent = 'Cannot select this range. There are unavailable dates between your pickup and return dates.';
+          errorDiv.style.cssText = 'color: var(--color-error); background-color: var(--color-bg-secondary); padding: var(--space-3); border-radius: var(--radius-md); margin-top: var(--space-3); font-size: var(--font-size-sm);';
+          
+          const calendar = document.getElementById('availability-calendar');
+          calendar.parentNode.insertBefore(errorDiv, calendar);
+          
+          // Remove error after 5 seconds
+          setTimeout(() => errorDiv.remove(), 5000);
+        }
         return;
       }
     }
@@ -2095,11 +2119,15 @@ function hasUnavailableDateInRange(startDate, endDate) {
   const end = new Date(endDate);
   
   // Check each date in range (excluding start and end)
-  for (let d = new Date(start); d < end; d.setDate(d.getDate() + 1)) {
-    const dateString = formatDateString(d);
+  const currentDate = new Date(start);
+  currentDate.setDate(currentDate.getDate() + 1); // Start from day after pickup
+  
+  while (currentDate < end) {
+    const dateString = formatDateString(currentDate);
     if (currentCar.unavailableDates.includes(dateString)) {
       return true;
     }
+    currentDate.setDate(currentDate.getDate() + 1);
   }
   
   return false;
@@ -2137,11 +2165,11 @@ function updateSelectedDatesInfo() {
     } else {
       totalPrice = duration * currentCar.pricePerDay;
     }
-    document.getElementById('total-price-display').textContent = `$${totalPrice}`;
+    document.getElementById('total-price-display').textContent = `$${totalPrice.toFixed(2)}`;
   } else {
     document.getElementById('return-date-display').textContent = 'Select return date';
     document.getElementById('duration-display').textContent = '-';
-    document.getElementById('total-price-display').textContent = '$0';
+    document.getElementById('total-price-display').textContent = '$0.00';
   }
 }
 

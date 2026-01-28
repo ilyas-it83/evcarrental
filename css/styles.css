@@ -819,7 +819,7 @@ input, textarea, select {
    Availability Calendar
    ============================================ */
 .availability-calendar-section {
-  background-color: var(--color-light);
+  background-color: var(--color-bg-secondary);
   padding: var(--space-6);
   border-radius: var(--radius-lg);
   margin-bottom: var(--space-6);
@@ -837,7 +837,7 @@ input, textarea, select {
 }
 
 #availability-calendar {
-  background-color: var(--color-white);
+  background-color: var(--color-surface);
   border-radius: var(--radius-md);
   padding: var(--space-4);
   margin-bottom: var(--space-4);
@@ -988,7 +988,7 @@ input, textarea, select {
 }
 
 .selected-dates-info {
-  background-color: var(--color-white);
+  background-color: var(--color-surface);
   padding: var(--space-4);
   border-radius: var(--radius-md);
   margin-top: var(--space-4);
