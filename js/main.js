@@ -381,6 +381,18 @@ function initForms() {
   const bookingForm = document.getElementById('booking-form');
   if (bookingForm) {
     bookingForm.addEventListener('submit', handleBookingSubmit);
+    
+    // Pre-select insurance tier from URL parameter
+    const urlParams = new URLSearchParams(window.location.search);
+    const insuranceParam = urlParams.get('insurance');
+    const insuranceTier = document.getElementById('insurance-tier');
+    
+    if (insuranceParam && insuranceTier) {
+      const validTiers = ['basic', 'standard', 'premium', 'ultimate'];
+      if (validTiers.includes(insuranceParam.toLowerCase())) {
+        insuranceTier.value = insuranceParam.toLowerCase();
+      }
+    }
   }
   
   // Contact Form
