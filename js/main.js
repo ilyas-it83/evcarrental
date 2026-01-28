@@ -14,6 +14,7 @@ let comparisonList = [];
 // DOM Ready
 // ============================================
 document.addEventListener('DOMContentLoaded', function() {
+  initTheme();
   initMobileMenu();
   initForms();
   initComparison();
@@ -63,6 +64,57 @@ function initMobileMenu() {
       });
     });
   }
+}
+
+// ============================================
+// Theme Toggle (Dark Mode)
+// ============================================
+function initTheme() {
+  const themeToggle = document.getElementById('theme-toggle');
+  
+  // Get saved theme or detect system preference
+  const savedTheme = localStorage.getItem('theme');
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  
+  // Apply initial theme
+  if (savedTheme) {
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  } else if (prefersDark) {
+    // Let CSS handle system preference (no data-theme attribute)
+  }
+  
+  // Theme toggle button click handler
+  if (themeToggle) {
+    themeToggle.addEventListener('click', toggleTheme);
+  }
+  
+  // Listen for system preference changes
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+    // Only apply if user hasn't set a preference
+    if (!localStorage.getItem('theme')) {
+      // CSS will handle this automatically
+      document.documentElement.removeAttribute('data-theme');
+    }
+  });
+}
+
+function toggleTheme() {
+  const currentTheme = document.documentElement.getAttribute('data-theme');
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  
+  let newTheme;
+  
+  if (currentTheme === 'dark') {
+    newTheme = 'light';
+  } else if (currentTheme === 'light') {
+    newTheme = 'dark';
+  } else {
+    // No explicit theme set, toggle based on system preference
+    newTheme = prefersDark ? 'light' : 'dark';
+  }
+  
+  document.documentElement.setAttribute('data-theme', newTheme);
+  localStorage.setItem('theme', newTheme);
 }
 
 // ============================================
@@ -124,6 +176,7 @@ function renderCarsGrid() {
 function createCarCard(car) {
   const avgRating = calculateAverageRating(car.reviews || []);
   const reviewCount = car.reviews ? car.reviews.length : 0;
+  const isInComparison = comparisonList.includes(car.id);
   
   return `
     <article class="car-card">
@@ -257,6 +310,33 @@ function renderCarDetails() {
           </div>
         </div>
         
+        <div class="availability-calendar-section">
+          <h3>Check Availability</h3>
+          <p class="calendar-description">Select your pickup and return dates to check availability and see pricing.</p>
+          <div id="availability-calendar"></div>
+          <div id="selected-dates-info" class="selected-dates-info" style="display: none;">
+            <div class="date-info-grid">
+              <div class="date-info-item">
+                <label>Pickup Date</label>
+                <span id="pickup-date-display">-</span>
+              </div>
+              <div class="date-info-item">
+                <label>Return Date</label>
+                <span id="return-date-display">-</span>
+              </div>
+              <div class="date-info-item">
+                <label>Duration</label>
+                <span id="duration-display">-</span>
+              </div>
+              <div class="date-info-item total-price-item">
+                <label>Total Price</label>
+                <span id="total-price-display" class="amount">$0</span>
+              </div>
+            </div>
+            <button id="clear-selection-btn" class="btn btn-secondary btn-sm">Clear Selection</button>
+          </div>
+        </div>
+        
         <a href="booking.html?car=${car.id}" class="btn btn-primary btn-lg" style="width: 100%;">
           Book Now
         </a>
@@ -270,6 +350,9 @@ function renderCarDetails() {
   if (car.reviews && car.reviews.length > 0) {
     initReviewFilters(car.reviews);
   }
+  
+  // Initialize availability calendar
+  initAvailabilityCalendar(car);
 }
 
 // ============================================
@@ -1810,4 +1893,301 @@ function updateStationCount() {
   if (countElement) {
     countElement.textContent = filteredStations.length;
   }
+}
+
+// ============================================
+// Availability Calendar
+// ============================================
+
+let currentCalendarMonth = new Date();
+let selectedPickupDate = null;
+let selectedReturnDate = null;
+let currentCar = null;
+
+function initAvailabilityCalendar(car) {
+  currentCar = car;
+  currentCalendarMonth = new Date();
+  selectedPickupDate = null;
+  selectedReturnDate = null;
+  
+  renderCalendar();
+  
+  // Add event listener for clear selection button
+  const clearBtn = document.getElementById('clear-selection-btn');
+  if (clearBtn) {
+    clearBtn.addEventListener('click', clearDateSelection);
+  }
+}
+
+function renderCalendar() {
+  const calendarContainer = document.getElementById('availability-calendar');
+  if (!calendarContainer || !currentCar) return;
+  
+  const year = currentCalendarMonth.getFullYear();
+  const month = currentCalendarMonth.getMonth();
+  
+  // Get first day of month and total days
+  const firstDay = new Date(year, month, 1);
+  const lastDay = new Date(year, month + 1, 0);
+  const totalDays = lastDay.getDate();
+  const startingDayOfWeek = firstDay.getDay();
+  
+  // Month names
+  const monthNames = [
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'
+  ];
+  
+  // Build calendar HTML
+  let html = `
+    <div class="calendar-header">
+      <button class="calendar-nav-btn" id="prev-month-btn" aria-label="Previous month">
+        <span>‹</span>
+      </button>
+      <h4 class="calendar-month-year">${monthNames[month]} ${year}</h4>
+      <button class="calendar-nav-btn" id="next-month-btn" aria-label="Next month">
+        <span>›</span>
+      </button>
+    </div>
+    <div class="calendar-weekdays">
+      <div>Sun</div>
+      <div>Mon</div>
+      <div>Tue</div>
+      <div>Wed</div>
+      <div>Thu</div>
+      <div>Fri</div>
+      <div>Sat</div>
+    </div>
+    <div class="calendar-days">
+  `;
+  
+  // Add empty cells for days before month starts
+  for (let i = 0; i < startingDayOfWeek; i++) {
+    html += '<div class="calendar-day empty"></div>';
+  }
+  
+  // Add days of the month
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  
+  for (let day = 1; day <= totalDays; day++) {
+    const currentDate = new Date(year, month, day);
+    const dateString = formatDateString(currentDate);
+    
+    let classes = ['calendar-day'];
+    let clickable = true;
+    
+    // Check if date is in the past
+    if (currentDate < today) {
+      classes.push('past');
+      clickable = false;
+    }
+    
+    // Check if date is unavailable
+    if (currentCar.unavailableDates && currentCar.unavailableDates.includes(dateString)) {
+      classes.push('unavailable');
+      clickable = false;
+    }
+    
+    // Check if date is selected
+    if (selectedPickupDate && dateString === formatDateString(selectedPickupDate)) {
+      classes.push('selected-start');
+    }
+    if (selectedReturnDate && dateString === formatDateString(selectedReturnDate)) {
+      classes.push('selected-end');
+    }
+    
+    // Check if date is in selected range
+    if (selectedPickupDate && selectedReturnDate) {
+      if (currentDate > selectedPickupDate && currentDate < selectedReturnDate) {
+        classes.push('in-range');
+      }
+    }
+    
+    // Check if date is today
+    if (currentDate.getTime() === today.getTime()) {
+      classes.push('today');
+    }
+    
+    html += `<div class="${classes.join(' ')}" data-date="${dateString}" ${clickable ? '' : 'data-disabled="true"'}>
+      ${day}
+    </div>`;
+  }
+  
+  html += '</div>';
+  
+  // Add legend
+  html += `
+    <div class="calendar-legend">
+      <div class="legend-item">
+        <span class="legend-box available"></span>
+        <span>Available</span>
+      </div>
+      <div class="legend-item">
+        <span class="legend-box unavailable"></span>
+        <span>Unavailable</span>
+      </div>
+      <div class="legend-item">
+        <span class="legend-box selected"></span>
+        <span>Selected</span>
+      </div>
+    </div>
+  `;
+  
+  calendarContainer.innerHTML = html;
+  
+  // Add event listeners using event delegation
+  const prevBtn = calendarContainer.querySelector('#prev-month-btn');
+  const nextBtn = calendarContainer.querySelector('#next-month-btn');
+  
+  if (prevBtn) {
+    prevBtn.addEventListener('click', () => {
+      currentCalendarMonth.setMonth(currentCalendarMonth.getMonth() - 1);
+      renderCalendar();
+    });
+  }
+  
+  if (nextBtn) {
+    nextBtn.addEventListener('click', () => {
+      currentCalendarMonth.setMonth(currentCalendarMonth.getMonth() + 1);
+      renderCalendar();
+    });
+  }
+  
+  // Add click listeners to calendar days
+  calendarContainer.querySelectorAll('.calendar-day:not(.empty):not([data-disabled])').forEach(dayEl => {
+    dayEl.addEventListener('click', (e) => {
+      const dateString = e.currentTarget.dataset.date;
+      handleDateSelection(dateString);
+    });
+  });
+}
+
+function formatDateString(date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
+function handleDateSelection(dateString) {
+  const selectedDate = new Date(dateString + 'T00:00:00');
+  
+  // If no pickup date is selected, or both dates are already selected, start fresh
+  if (!selectedPickupDate || (selectedPickupDate && selectedReturnDate)) {
+    selectedPickupDate = selectedDate;
+    selectedReturnDate = null;
+  } 
+  // If pickup is selected but no return date
+  else if (selectedPickupDate && !selectedReturnDate) {
+    // If selected date is before pickup, make it the new pickup
+    if (selectedDate < selectedPickupDate) {
+      selectedPickupDate = selectedDate;
+    } 
+    // Otherwise, make it the return date
+    else if (selectedDate > selectedPickupDate) {
+      // Check if there are any unavailable dates in the range
+      if (!hasUnavailableDateInRange(selectedPickupDate, selectedDate)) {
+        selectedReturnDate = selectedDate;
+      } else {
+        // Show error message inline
+        const calendarSection = document.querySelector('.availability-calendar-section');
+        if (calendarSection) {
+          const existingError = calendarSection.querySelector('.calendar-error-message');
+          if (existingError) {
+            existingError.remove();
+          }
+          
+          const errorDiv = document.createElement('div');
+          errorDiv.className = 'calendar-error-message';
+          errorDiv.textContent = 'Cannot select this range. There are unavailable dates between your pickup and return dates.';
+          errorDiv.style.cssText = 'color: var(--color-error); background-color: var(--color-bg-secondary); padding: var(--space-3); border-radius: var(--radius-md); margin-top: var(--space-3); font-size: var(--font-size-sm);';
+          
+          const calendar = document.getElementById('availability-calendar');
+          calendar.parentNode.insertBefore(errorDiv, calendar);
+          
+          // Remove error after 5 seconds
+          setTimeout(() => errorDiv.remove(), 5000);
+        }
+        return;
+      }
+    }
+    // If same date clicked, clear selection
+    else {
+      selectedPickupDate = null;
+      selectedReturnDate = null;
+    }
+  }
+  
+  // Update UI
+  renderCalendar();
+  updateSelectedDatesInfo();
+}
+
+function hasUnavailableDateInRange(startDate, endDate) {
+  if (!currentCar.unavailableDates) return false;
+  
+  const start = new Date(startDate);
+  const end = new Date(endDate);
+  
+  // Check each date in range (excluding start and end)
+  const currentDate = new Date(start);
+  currentDate.setDate(currentDate.getDate() + 1); // Start from day after pickup
+  
+  while (currentDate < end) {
+    const dateString = formatDateString(currentDate);
+    if (currentCar.unavailableDates.includes(dateString)) {
+      return true;
+    }
+    currentDate.setDate(currentDate.getDate() + 1);
+  }
+  
+  return false;
+}
+
+function updateSelectedDatesInfo() {
+  const infoContainer = document.getElementById('selected-dates-info');
+  
+  if (!selectedPickupDate) {
+    infoContainer.style.display = 'none';
+    return;
+  }
+  
+  infoContainer.style.display = 'block';
+  
+  // Update pickup date
+  document.getElementById('pickup-date-display').textContent = 
+    selectedPickupDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  
+  // Update return date
+  if (selectedReturnDate) {
+    document.getElementById('return-date-display').textContent = 
+      selectedReturnDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    
+    // Calculate duration
+    const duration = Math.ceil((selectedReturnDate - selectedPickupDate) / (1000 * 60 * 60 * 24));
+    document.getElementById('duration-display').textContent = `${duration} ${duration === 1 ? 'day' : 'days'}`;
+    
+    // Calculate total price
+    let totalPrice;
+    if (duration >= 7) {
+      const weeks = Math.floor(duration / 7);
+      const remainingDays = duration % 7;
+      totalPrice = (weeks * currentCar.pricePerWeek) + (remainingDays * currentCar.pricePerDay);
+    } else {
+      totalPrice = duration * currentCar.pricePerDay;
+    }
+    document.getElementById('total-price-display').textContent = `$${totalPrice.toFixed(2)}`;
+  } else {
+    document.getElementById('return-date-display').textContent = 'Select return date';
+    document.getElementById('duration-display').textContent = '-';
+    document.getElementById('total-price-display').textContent = '$0.00';
+  }
+}
+
+function clearDateSelection() {
+  selectedPickupDate = null;
+  selectedReturnDate = null;
+  renderCalendar();
+  updateSelectedDatesInfo();
 }

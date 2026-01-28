@@ -341,3 +341,42 @@ Worktree 1       = RFP_TechTeam.docx
 Worktree 2       = RFP_Finance.docx
 Worktree 3       = RFP_Legal.docx
 ```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ We will start the session 2.40 pm
+
+
+
+
+
+
+
+
+
+
+
+
+

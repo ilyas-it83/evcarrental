@@ -16,6 +16,7 @@
       "features": ["AC", "Bluetooth", "USB Charging", "Backup Camera", "Cruise Control"],
       "images": ["camry-1.jpg", "camry-2.jpg", "camry-3.jpg"],
       "available": true,
+      "unavailableDates": ["2026-02-05", "2026-02-06", "2026-02-07", "2026-02-15", "2026-02-16"],
       "featured": true,
       "description": "The Toyota Camry Hybrid combines fuel efficiency with comfort. Perfect for long trips and daily commutes.",
       "reviews": [
@@ -66,6 +67,7 @@
       "features": ["Autopilot", "Premium Audio", "Glass Roof", "Supercharger Access", "Mobile App Control"],
       "images": ["tesla-model3-1.jpg", "tesla-model3-2.jpg"],
       "available": true,
+      "unavailableDates": ["2026-02-01", "2026-02-02", "2026-02-03", "2026-02-10", "2026-02-11", "2026-02-12", "2026-02-20", "2026-02-21"],
       "featured": true,
       "description": "Experience the future of driving with the Tesla Model 3. Zero emissions, maximum performance.",
       "reviews": [
@@ -120,6 +122,7 @@
       "features": ["AC", "Apple CarPlay", "Android Auto", "Lane Assist", "Sunroof"],
       "images": ["crv-1.jpg", "crv-2.jpg"],
       "available": true,
+      "unavailableDates": ["2026-02-08", "2026-02-09", "2026-02-14", "2026-02-22", "2026-02-23"],
       "featured": true,
       "description": "Spacious and reliable, the Honda CR-V is perfect for family trips and adventures.",
       "reviews": [
@@ -167,6 +170,7 @@
       "features": ["Leather Seats", "Premium Sound", "Navigation", "Heated Seats", "Parking Sensors"],
       "images": ["bmw3-1.jpg", "bmw3-2.jpg"],
       "available": true,
+      "unavailableDates": ["2026-02-13", "2026-02-14", "2026-02-15", "2026-02-16", "2026-02-17"],
       "featured": false,
       "description": "Drive in style with the BMW 3 Series. Luxury meets performance.",
       "reviews": [
@@ -214,6 +218,7 @@
       "features": ["AC", "Bluetooth", "USB Charging", "Backup Camera"],
       "images": ["golf-1.jpg", "golf-2.jpg"],
       "available": true,
+      "unavailableDates": ["2026-02-04", "2026-02-05", "2026-02-18", "2026-02-19", "2026-02-25"],
       "featured": false,
       "description": "Compact and efficient, the Golf is perfect for city driving and parking.",
       "reviews": [
@@ -254,6 +259,7 @@
       "features": ["AC", "Bluetooth", "Backup Camera", "Large Cargo Space", "Sliding Doors"],
       "images": ["transit-1.jpg", "transit-2.jpg"],
       "available": true,
+      "unavailableDates": ["2026-02-06", "2026-02-07", "2026-02-08", "2026-02-24", "2026-02-25", "2026-02-26"],
       "featured": false,
       "description": "Need space? The Ford Transit is ideal for group travel and moving cargo.",
       "reviews": [
@@ -304,6 +310,7 @@
       "features": ["ProPilot Assist", "e-Pedal", "Quick Charge", "Navigation", "Around View Monitor"],
       "images": ["leaf-1.jpg", "leaf-2.jpg"],
       "available": true,
+      "unavailableDates": ["2026-02-12", "2026-02-13", "2026-02-20", "2026-02-21", "2026-02-27"],
       "featured": false,
       "description": "Affordable electric driving with the Nissan Leaf. Go green without breaking the bank.",
       "reviews": [
@@ -353,6 +360,7 @@
       "features": ["Massage Seats", "Burmester Audio", "MBUX System", "Air Suspension", "360 Camera"],
       "images": ["eclass-1.jpg", "eclass-2.jpg"],
       "available": true,
+      "unavailableDates": ["2026-02-01", "2026-02-02", "2026-02-03", "2026-02-04", "2026-02-28"],
       "featured": true,
       "description": "The pinnacle of luxury. Experience world-class comfort in the Mercedes E-Class.",
       "reviews": [
@@ -410,6 +418,7 @@
       "features": ["Smart Cruise Control", "Wireless Charging", "Heads-Up Display", "Heated Steering", "Lane Keep Assist"],
       "images": ["kona-1.jpg", "kona-2.jpg"],
       "available": true,
+      "unavailableDates": ["2026-02-10", "2026-02-11", "2026-02-17", "2026-02-18"],
       "featured": false,
       "description": "Compact electric SUV with impressive range and modern tech features.",
       "reviews": [
@@ -443,6 +452,7 @@
       "features": ["AC", "Apple CarPlay", "Blind Spot Monitor", "Power Liftgate", "Bose Audio"],
       "images": ["cx5-1.jpg", "cx5-2.jpg"],
       "available": true,
+      "unavailableDates": ["2026-02-09", "2026-02-10", "2026-02-23", "2026-02-24"],
       "featured": false,
       "description": "Stylish and fun-to-drive SUV with premium interior quality.",
       "reviews": [
@@ -476,6 +486,7 @@
       "features": ["Quattro AWD", "Virtual Cockpit", "Bang & Olufsen Audio", "Matrix LED Headlights", "Memory Seats"],
       "images": ["a4-1.jpg", "a4-2.jpg"],
       "available": true,
+      "unavailableDates": ["2026-02-14", "2026-02-15", "2026-02-16", "2026-02-21", "2026-02-22"],
       "featured": true,
       "description": "German engineering at its finest. The Audi A4 delivers refined luxury and performance.",
       "reviews": [
@@ -518,6 +529,7 @@
       "features": ["Panoramic Sunroof", "Wireless Apple CarPlay", "Highway Driving Assist", "Remote Start", "Harman Kardon Audio"],
       "images": ["sportage-1.jpg", "sportage-2.jpg"],
       "available": true,
+      "unavailableDates": ["2026-02-05", "2026-02-06", "2026-02-19", "2026-02-20", "2026-02-26"],
       "featured": false,
       "description": "Modern hybrid SUV with bold design and excellent fuel efficiency.",
       "reviews": [
@@ -553,6 +565,7 @@
       "features": ["Pilot Assist", "Bowers & Wilkins Audio", "Nappa Leather", "Air Quality System", "Crystal Gearshift"],
       "images": ["xc60-1.jpg", "xc60-2.jpg"],
       "available": true,
+      "unavailableDates": ["2026-02-07", "2026-02-08", "2026-02-09", "2026-02-10", "2026-02-27", "2026-02-28"],
       "featured": true,
       "description": "Scandinavian luxury SUV combining safety, comfort, and sustainability.",
       "reviews": [
@@ -596,6 +609,7 @@
       "features": ["Super Cruise", "HD Surround Vision", "One-Pedal Driving", "WiFi Hotspot", "Teen Driver Mode"],
       "images": ["bolt-1.jpg", "bolt-2.jpg"],
       "available": true,
+      "unavailableDates": ["2026-02-11", "2026-02-12", "2026-02-13", "2026-02-25", "2026-02-26"],
       "featured": false,
       "description": "Affordable electric crossover with hands-free driving capability.",
       "reviews": [
@@ -629,6 +643,7 @@
       "features": ["Symmetrical AWD", "EyeSight Safety", "X-Mode", "Roof Rails", "Large Touchscreen"],
       "images": ["outback-1.jpg", "outback-2.jpg"],
       "available": true,
+      "unavailableDates": ["2026-02-03", "2026-02-04", "2026-02-17", "2026-02-18", "2026-02-19"],
       "featured": false,
       "description": "Adventure-ready wagon with legendary reliability and all-weather capability.",
       "reviews": [
@@ -669,6 +684,7 @@
       "features": ["3D i-Cockpit", "Touch Screen", "Parking Sensors", "LED Lights", "USB Ports"],
       "images": ["208-1.jpg", "208-2.jpg"],
       "available": true,
+      "unavailableDates": ["2026-02-01", "2026-02-02", "2026-02-15", "2026-02-16", "2026-02-22"],
       "featured": false,
       "description": "Stylish French hatchback with distinctive design and nimble handling.",
       "reviews": [
@@ -704,6 +720,7 @@
       "features": ["Mark Levinson Audio", "Semi-Aniline Leather", "Climate Concierge", "Shiatsu Massage Seats", "Ambient Lighting"],
       "images": ["es300h-1.jpg", "es300h-2.jpg"],
       "available": true,
+      "unavailableDates": ["2026-02-06", "2026-02-07", "2026-02-08", "2026-02-23", "2026-02-24", "2026-02-25"],
       "featured": true,
       "description": "Japanese luxury sedan renowned for reliability and whisper-quiet comfort.",
       "reviews": [
@@ -744,6 +761,7 @@
       "features": ["AC", "Bluetooth", "Rear Parking Sensors", "Sliding Side Door", "Modular Storage"],
       "images": ["kangoo-1.jpg", "kangoo-2.jpg"],
       "available": true,
+      "unavailableDates": ["2026-02-12", "2026-02-13", "2026-02-14", "2026-02-20", "2026-02-21"],
       "featured": false,
       "description": "Compact and practical van ideal for small business deliveries and family trips.",
       "reviews": [
