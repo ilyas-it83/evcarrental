@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Compare insurance and protection options for your EV rental. Choose from Basic, Standard, Premium, or Ultimate coverage with EV-specific protection.">
+  <title>Insurance Options - EV Car Rental</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="container">
+      <a href="index.html" class="logo">
+        <span class="logo-icon">🚗</span>
+        EV Car Rental
+      </a>
+      
+      <nav class="nav-desktop">
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="cars.html">Our Cars</a></li>
+          <li><a href="charging-calculator.html">Calculator</a></li>
+          <li><a href="booking.html">Book Now</a></li>
+          <li><a href="charging-stations.html">Charging Stations</a></li>
+          <li><a href="range-calculator.html">Range Calculator</a></li>
+          <li><a href="loyalty.html">Rewards</a></li>
+          <li><a href="insurance.html" class="active">Insurance</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+      
+      <button class="menu-toggle" aria-label="Toggle menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      
+      <nav class="nav-mobile">
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="cars.html">Our Cars</a></li>
+          <li><a href="charging-calculator.html">Calculator</a></li>
+          <li><a href="booking.html">Book Now</a></li>
+          <li><a href="charging-stations.html">Charging Stations</a></li>
+          <li><a href="range-calculator.html">Range Calculator</a></li>
+          <li><a href="loyalty.html">Rewards</a></li>
+          <li><a href="insurance.html" class="active">Insurance</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Page Header -->
+  <section class="page-header">
+    <div class="container">
+      <h1>Insurance & Protection Options</h1>
+      <p>Choose the coverage level that gives you peace of mind</p>
+    </div>
+  </section>
+
+  <!-- Breadcrumb -->
+  <nav class="breadcrumb">
+    <div class="container">
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li>Insurance</li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Insurance Overview -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <h2>Protect Your Journey</h2>
+        <p>We offer four levels of coverage to match your needs and budget. All options include EV-specific protection for battery and charging equipment.</p>
+      </div>
+
+      <!-- Insurance Tiers Comparison Table -->
+      <div class="insurance-comparison">
+        <div class="insurance-tier">
+          <div class="tier-header tier-basic">
+            <h3>Basic</h3>
+            <div class="tier-price">
+              <span class="price-amount">$0</span>
+              <span class="price-period">/day</span>
+            </div>
+            <p class="tier-subtitle">Included with every rental</p>
+          </div>
+          <div class="tier-body">
+            <div class="tier-features">
+              <h4>What's Included</h4>
+              <ul class="feature-list included">
+                <li>Third-party liability coverage</li>
+                <li>Basic roadside assistance</li>
+                <li>24/7 customer support</li>
+                <li>Emergency contact line</li>
+              </ul>
+            </div>
+            <div class="tier-features">
+              <h4>What's Not Included</h4>
+              <ul class="feature-list excluded">
+                <li>Collision damage</li>
+                <li>Theft protection</li>
+                <li>Personal effects</li>
+                <li>Zero deductible</li>
+              </ul>
+            </div>
+            <a href="booking.html?insurance=basic" class="btn btn-outline">Select Basic</a>
+          </div>
+        </div>
+
+        <div class="insurance-tier">
+          <div class="tier-header tier-standard">
+            <h3>Standard</h3>
+            <div class="tier-price">
+              <span class="price-amount">$15</span>
+              <span class="price-period">/day</span>
+            </div>
+            <p class="tier-subtitle">Collision damage waiver</p>
+          </div>
+          <div class="tier-body">
+            <div class="tier-features">
+              <h4>What's Included</h4>
+              <ul class="feature-list included">
+                <li>All Basic coverage</li>
+                <li>Collision damage waiver</li>
+                <li>Theft protection</li>
+                <li>Glass and tire coverage</li>
+                <li>Battery damage protection</li>
+                <li>Charging cable coverage</li>
+              </ul>
+            </div>
+            <div class="tier-features">
+              <h4>What's Not Included</h4>
+              <ul class="feature-list excluded">
+                <li>Personal effects</li>
+                <li>Premium roadside assistance</li>
+                <li>Zero deductible ($500 deductible applies)</li>
+              </ul>
+            </div>
+            <a href="booking.html?insurance=standard" class="btn btn-outline">Select Standard</a>
+          </div>
+        </div>
+
+        <div class="insurance-tier featured">
+          <div class="tier-badge">Most Popular</div>
+          <div class="tier-header tier-premium">
+            <h3>Premium</h3>
+            <div class="tier-price">
+              <span class="price-amount">$25</span>
+              <span class="price-period">/day</span>
+            </div>
+            <p class="tier-subtitle">Full coverage + roadside</p>
+          </div>
+          <div class="tier-body">
+            <div class="tier-features">
+              <h4>What's Included</h4>
+              <ul class="feature-list included">
+                <li>All Standard coverage</li>
+                <li>Premium roadside assistance</li>
+                <li>Towing up to 100 miles</li>
+                <li>Flat tire service</li>
+                <li>Battery jump-start</li>
+                <li>Lockout service</li>
+                <li>Fuel/charge delivery</li>
+                <li>Reduced deductible ($250)</li>
+              </ul>
+            </div>
+            <div class="tier-features">
+              <h4>What's Not Included</h4>
+              <ul class="feature-list excluded">
+                <li>Personal effects coverage</li>
+                <li>Zero deductible</li>
+              </ul>
+            </div>
+            <a href="booking.html?insurance=premium" class="btn btn-primary">Select Premium</a>
+          </div>
+        </div>
+
+        <div class="insurance-tier">
+          <div class="tier-header tier-ultimate">
+            <h3>Ultimate</h3>
+            <div class="tier-price">
+              <span class="price-amount">$35</span>
+              <span class="price-period">/day</span>
+            </div>
+            <p class="tier-subtitle">Complete peace of mind</p>
+          </div>
+          <div class="tier-body">
+            <div class="tier-features">
+              <h4>What's Included</h4>
+              <ul class="feature-list included">
+                <li>All Premium coverage</li>
+                <li>Zero deductible</li>
+                <li>Personal effects coverage (up to $1,500)</li>
+                <li>Trip interruption coverage</li>
+                <li>Alternative transport</li>
+                <li>Medical expense coverage</li>
+                <li>Priority customer service</li>
+                <li>Premium vehicle replacement</li>
+              </ul>
+            </div>
+            <div class="tier-features">
+              <h4>Nothing Excluded</h4>
+              <p class="exclusion-note">This is our most comprehensive coverage with no deductible and maximum protection for both vehicle and personal items.</p>
+            </div>
+            <a href="booking.html?insurance=ultimate" class="btn btn-outline">Select Ultimate</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EV-Specific Coverage -->
+  <section class="section section-alt">
+    <div class="container">
+      <div class="section-header">
+        <h2>⚡ EV-Specific Protection</h2>
+        <p>All our insurance plans include specialized coverage for electric vehicles</p>
+      </div>
+
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">🔋</div>
+          <h3>Battery Protection</h3>
+          <p>Coverage for battery damage, degradation issues, and replacement costs during your rental period.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">🔌</div>
+          <h3>Charging Equipment</h3>
+          <p>Protection for charging cables, connectors, and portable charging equipment included with the vehicle.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">⚡</div>
+          <h3>Charging Station Damage</h3>
+          <p>Coverage for accidental damage to public charging stations while using them with your rental vehicle.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">🛠️</div>
+          <h3>EV System Failure</h3>
+          <p>Protection against electronic system failures, software issues, and EV-specific component malfunctions.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Coverage Details -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <h2>Coverage Details</h2>
+      </div>
+
+      <div class="coverage-details">
+        <div class="detail-card">
+          <h3>🛡️ Collision Damage Waiver (CDW)</h3>
+          <p>Reduces or eliminates your financial responsibility for damage to the rental vehicle in the event of a collision. Available in Standard, Premium, and Ultimate plans.</p>
+          <ul>
+            <li>Standard: $500 deductible</li>
+            <li>Premium: $250 deductible</li>
+            <li>Ultimate: $0 deductible</li>
+          </ul>
+        </div>
+
+        <div class="detail-card">
+          <h3>🚗 Theft Protection</h3>
+          <p>Covers the full value of the vehicle in case of theft. Includes coverage for stolen personal items from the vehicle (Ultimate plan only).</p>
+        </div>
+
+        <div class="detail-card">
+          <h3>🆘 Roadside Assistance</h3>
+          <p>24/7 support for mechanical breakdowns, flat tires, lockouts, and battery issues. Premium and Ultimate plans include towing up to 100 miles and priority response times.</p>
+        </div>
+
+        <div class="detail-card">
+          <h3>👤 Personal Effects Coverage</h3>
+          <p>Available only with Ultimate plan. Covers loss or damage to personal belongings left in the vehicle, up to $1,500 per incident.</p>
+        </div>
+
+        <div class="detail-card">
+          <h3>🩺 Medical Expense Coverage</h3>
+          <p>Ultimate plan includes medical expense coverage for injuries sustained while operating or occupying the rental vehicle. Up to $5,000 per person.</p>
+        </div>
+
+        <div class="detail-card">
+          <h3>🚧 Trip Interruption</h3>
+          <p>Ultimate plan provides compensation for lodging, meals, and alternative transportation if your rental becomes undriveable due to a covered incident.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Section -->
+  <section class="section section-alt">
+    <div class="container">
+      <div class="section-header">
+        <h2>Frequently Asked Questions</h2>
+      </div>
+
+      <div class="faq-container">
+        <div class="faq-item">
+          <h3>Can I change my insurance coverage after booking?</h3>
+          <p>Yes, you can upgrade or downgrade your insurance coverage up to 24 hours before your pickup date by contacting our customer service team.</p>
+        </div>
+
+        <div class="faq-item">
+          <h3>Does my personal auto insurance cover rental cars?</h3>
+          <p>Many personal auto insurance policies and credit cards offer coverage for rental vehicles. We recommend checking with your insurance provider before purchasing additional coverage.</p>
+        </div>
+
+        <div class="faq-item">
+          <h3>What happens if I decline all optional insurance?</h3>
+          <p>You'll still have Basic coverage (third-party liability) included with your rental, but you'll be responsible for any damage to the vehicle up to its full value.</p>
+        </div>
+
+        <div class="faq-item">
+          <h3>Are there any exclusions to the coverage?</h3>
+          <p>Yes, coverage does not apply to damage caused by driving under the influence, reckless driving, off-road use, or violations of the rental agreement terms.</p>
+        </div>
+
+        <div class="faq-item">
+          <h3>Is the battery covered if it runs out during my rental?</h3>
+          <p>Running out of charge is not considered damage. However, our roadside assistance will help you get to a charging station. Premium and Ultimate plans include charge delivery service.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="section">
+    <div class="container">
+      <div style="text-align: center; padding: var(--space-12); background: linear-gradient(135deg, var(--color-primary), var(--color-secondary)); color: var(--color-white); border-radius: var(--radius-lg);">
+        <h2 style="color: var(--color-white); margin-bottom: var(--space-4);">Ready to Book with Insurance?</h2>
+        <p style="font-size: var(--font-size-lg); margin-bottom: var(--space-8); opacity: 0.95;">
+          Select your coverage level during the booking process and enjoy worry-free driving.
+        </p>
+        <a href="booking.html" class="btn btn-lg" style="background-color: var(--color-white); color: var(--color-primary);">
+          Book Your Rental Now
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-section">
+          <h3>EV Car Rental</h3>
+          <p>Your trusted partner for quality car rentals since 2020. We're committed to providing reliable vehicles and exceptional customer service.</p>
+        </div>
+        
+        <div class="footer-section">
+          <h3>Quick Links</h3>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="cars.html">Our Cars</a></li>
+            <li><a href="booking.html">Book Now</a></li>
+            <li><a href="insurance.html">Insurance</a></li>
+            <li><a href="loyalty.html">Rewards</a></li>
+            <li><a href="about.html">About Us</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-section">
+          <h3>Vehicle Types</h3>
+          <ul>
+            <li><a href="cars.html">Sedans</a></li>
+            <li><a href="cars.html">SUVs</a></li>
+            <li><a href="cars.html">Electric Cars</a></li>
+            <li><a href="cars.html">Luxury Cars</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-section">
+          <h3>Contact Us</h3>
+          <ul>
+            <li>📞 +1 (555) 123-4567</li>
+            <li>📧 info@evcarrental.com</li>
+            <li>📍 123 Main Street<br>City, State 12345</li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="footer-bottom">
+        <p>&copy; 2024 EV Car Rental. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

@@ -25,6 +25,7 @@
           <li><a href="charging-stations.html">Charging Stations</a></li>
           <li><a href="range-calculator.html">Range Calculator</a></li>
           <li><a href="loyalty.html">Rewards</a></li>
+          <li><a href="insurance.html">Insurance</a></li>
           <li><a href="about.html">About Us</a></li>
           <li><a href="contact.html">Contact</a></li>
         </ul>
@@ -45,6 +46,7 @@
           <li><a href="charging-stations.html">Charging Stations</a></li>
           <li><a href="range-calculator.html">Range Calculator</a></li>
           <li><a href="loyalty.html">Rewards</a></li>
+          <li><a href="insurance.html">Insurance</a></li>
           <li><a href="about.html">About Us</a></li>
           <li><a href="contact.html">Contact</a></li>
         </ul>
@@ -128,14 +130,24 @@
             <input type="tel" id="phone" name="phone" placeholder="+1 (555) 123-4567" required>
           </div>
           
+          <!-- Insurance Selection -->
+          <div class="form-group">
+            <label for="insurance-tier">Insurance Coverage *</label>
+            <select id="insurance-tier" name="insurance-tier" required>
+              <option value="basic">Basic - Liability Only ($0/day - Included)</option>
+              <option value="standard">Standard - Collision Damage Waiver ($15/day)</option>
+              <option value="premium" selected>Premium - Full Coverage + Roadside ($25/day)</option>
+              <option value="ultimate">Ultimate - Zero Deductible + Personal Effects ($35/day)</option>
+            </select>
+            <small style="display: block; margin-top: var(--space-2); color: var(--color-gray);">
+              <a href="insurance.html" target="_blank" style="color: var(--color-primary);">Learn more about insurance options</a>
+            </small>
+          </div>
+          
           <!-- Additional Options -->
           <div class="form-group">
             <label>Additional Options</label>
             <div class="checkbox-group">
-              <label>
-                <input type="checkbox" name="options" value="insurance">
-                Extra Insurance Coverage
-              </label>
               <label>
                 <input type="checkbox" name="options" value="gps">
                 GPS Navigation
